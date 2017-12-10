@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProfile name="Dev">
+        <appender name="LOGGER" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
+    <springProfile name="Ops">
+        <appender name="LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_FILE}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_FILE}_%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+                <maxFileSize>${MAX_FILE_SIZE:-10MB}</maxFileSize>
+                <maxHistory>${MAX_HISTORY:-30}</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <root level="INFO">
+        <appender-ref ref="LOGGER"/>
+    </root>
+</configuration>
