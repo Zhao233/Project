@@ -1,0 +1,6 @@
+# 应用端口
+server.port: 80
+
+# 活动的Profiles
+spring.profiles.active: Dev
+

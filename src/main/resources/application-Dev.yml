@@ -1,0 +1,11 @@
+# 适用于开发环境
+spring.profile.name: application-Dev.yml
+
+# 日志设置
+logging:
+  # 设置日志输出级别
+  level:
+    root: WARN # root日志级别为WARN
+    org.springframework: WARN
+    org.hibernate: DEBUG
+    com.duckduckgogogo: DEBUG # 应用日志级别为DEBUG

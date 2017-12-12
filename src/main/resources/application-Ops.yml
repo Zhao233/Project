@@ -1,0 +1,15 @@
+# 适用于运行环境
+spring.profile.name: application-Ops.yml
+
+# 日志设置
+logging:
+  # 日志文件输出路径
+  file: 'logs/stdout.log'
+  # 日志文件输出格式
+  config: 'classpath:cfg/logback.xml'
+  # 设置日志输出级别
+  level:
+    root: WARN # root日志级别为WARN
+    org.springframework: WARN
+    org.hibernate: WARN
+    com.duckduckgogogo: INFO # 应用日志级别为INFO
