@@ -14,11 +14,11 @@ import java.io.PrintWriter;
 
 @Controller
 @SpringBootApplication
-public class Bootstarup {
-    private static final Logger logger = LoggerFactory.getLogger(Bootstarup.class);
+public class Bootstrap {
+    private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(Bootstarup.class, args);
+        SpringApplication.run(Bootstrap.class, args);
 
         logger.info("HELLOWORLD Started.");
     }

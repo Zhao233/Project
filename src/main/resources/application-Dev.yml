@@ -6,6 +6,7 @@ logging:
   # 设置日志输出级别
   level:
     root: WARN # root日志级别为WARN
-    org.springframework: WARN
-    org.hibernate: DEBUG
+    org:
+      springframework: WARN
+      hibernate: DEBUG
     com.duckduckgogogo: DEBUG # 应用日志级别为DEBUG

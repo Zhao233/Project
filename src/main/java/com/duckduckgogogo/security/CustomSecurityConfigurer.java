@@ -1,6 +1,6 @@
 package com.duckduckgogogo.security;
 
-import com.duckduckgogogo.utils.SHA;
+import com.duckduckgogogo.utils.PasswordEncodeAssistant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
             new PasswordEncoder() {
                 @Override
                 public String encode(CharSequence charSequence) {
-                    return SHA.encode(((String) charSequence).toCharArray());
+                    return PasswordEncodeAssistant.encode(((String) charSequence).toCharArray());
                 }
 
                 @Override
