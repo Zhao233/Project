@@ -1,6 +1,34 @@
 # 适用于开发环境
 spring.profile.name: application-Dev.yml
 
+spring:
+  # 静态文件路径
+  mvc:
+    static-path-pattern: classpath:/static/
+  #
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
+  # 配置数据库连接信息
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/duckduckgogogo?characterEncoding=utf8&useSSL=false
+    username: root
+    password: "0000000"
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.configuration.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
 # 日志设置
 logging:
   # 设置日志输出级别

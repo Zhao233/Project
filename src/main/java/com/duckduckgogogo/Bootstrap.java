@@ -6,11 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @SpringBootApplication
@@ -23,21 +24,21 @@ public class Bootstrap {
         logger.info("HELLOWORLD Started.");
     }
 
-    // @RequestMapping(value = "/", method = RequestMethod.GET)
-    @GetMapping(value = "/")
-    public void homePage(HttpServletRequest request, HttpServletResponse response) {
-        logger.debug("DEBUG logger test.");
+    @RequestMapping(value = "/")
+    public ModelAndView index() {
+        Map<String, Object> model = new HashMap<String, Object>();
 
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+        Map<String, String> page = new HashMap<String, String>();
+        page.put("username", "灵魂之王");
 
-        try (PrintWriter o = response.getWriter()) {
-            o.write("<p>I am the king of the world.</p>");
-            o.write("<p>我是世界之王。</p>");
+        model.put("page", page);
 
-            o.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return new ModelAndView("index", model);
+    }
+
+    @GetMapping(value = "/home")
+    @ResponseBody
+    public String home() {
+        return "你好，世界。";
     }
 }
