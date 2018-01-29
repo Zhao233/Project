@@ -43,7 +43,7 @@ public class UserManagementController {
 
     @PostMapping("/save")
     @ResponseBody
-    public Map<String, Object> save(@Valid User user, @RequestParam String password2) {
+    public Map<String, Object> save(@Valid User user, @RequestParam String password2) throws Exception {
         Map<String, Object> r = new HashMap<>();
 
         Map<String, String> message = new HashMap<>();
@@ -52,7 +52,7 @@ public class UserManagementController {
         User mark = userService.findById(user.getId());
         User logged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (mark != null && mark.getId() == logged.getId()) {
-            message.put("Warning", "Oh snap! You can't modify yourself.");
+            message.put("WARNING", "Oh snap! You can't modify yourself.");
         } else {
             if (mark != null && user.getPassword().isEmpty() && password2.isEmpty())  {
                 user.setPassword(mark.getPassword());
@@ -134,9 +134,7 @@ public class UserManagementController {
     @ResponseBody
     public User get (@PathVariable Integer id) {
         User user = userService.findById(id.longValue());
-
-        user.setPassword("");
-
+        if (user != null) user.setPassword("");
         return user;
     }
 }

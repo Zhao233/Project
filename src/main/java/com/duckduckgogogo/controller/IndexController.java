@@ -22,16 +22,15 @@ public class IndexController {
     }
 
     @RequestMapping("/logged")
-    public String logged(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String logged(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-            if (user != null) {
-                user.setPassword(null);
-                request.getSession().setAttribute("user", user);
-            }
-        } catch (Exception e) {}
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return "redirect:/console"; // new ModelAndView("console/index");
+        if (user != null) {
+            user.setPassword(null);
+            request.getSession().setAttribute("user", user);
+        }
+
+        return "redirect:/console";
     }
 }

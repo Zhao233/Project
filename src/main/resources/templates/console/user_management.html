@@ -241,22 +241,17 @@
                 _reset($(".form-horizontal.add-new-user"));
                 // 读取用户选中的用户信息
                 $.get("/console/user_management/get/" + id, null, function(r, status) {
-                    if (status == "success") {
-                        $("#dialog-user-management-update").find("input[id='id']").val(r.id);
-                        $("#dialog-user-management-update").find("input[id='version']").val(r.version);
-                        $("#dialog-user-management-update").find("input[id='username']").val(r.username);
-                        $("#dialog-user-management-update").find("input[id='firstName']").val(r.firstName);
-                        $("#dialog-user-management-update").find("input[id='lastName']").val(r.lastName);
-                        $("#dialog-user-management-update").find("input[id='email']").val(r.email);
-                        $("#dialog-user-management-update").find("select[id='role']").val(r.role);
-                        $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
+                    $("#dialog-user-management-update").find("input[id='id']").val(r.id);
+                    $("#dialog-user-management-update").find("input[id='version']").val(r.version);
+                    $("#dialog-user-management-update").find("input[id='username']").val(r.username);
+                    $("#dialog-user-management-update").find("input[id='firstName']").val(r.firstName);
+                    $("#dialog-user-management-update").find("input[id='lastName']").val(r.lastName);
+                    $("#dialog-user-management-update").find("input[id='email']").val(r.email);
+                    $("#dialog-user-management-update").find("select[id='role']").val(r.role);
+                    $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
 
-                        $("#dialog-user-management-update-title").html("Update user");
-                        $("#dialog-user-management-update").modal("show");
-                    } else {
-                        $(".bs-example-modal-sm").find(".modal-body").html("Extraction of user anomalies.");
-		                $(".bs-example-modal-sm").modal("show");
-                    }
+                    $("#dialog-user-management-update-title").html("Update user");
+                    $("#dialog-user-management-update").modal("show");
                 });
 		    } else {
 		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
@@ -293,9 +288,9 @@
                     if (r.message.lastName) {
                         _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
                     }
-                    if (r.message.Warning) {
-                        $(".bs-example-modal-sm").find(".modal-body").html(r.message.Warning);
-		                $(".bs-example-modal-sm").modal("show");
+                    if (r.message.WARNING) {
+                        $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                        $(".bs-example-modal-sm").modal("show");
                     }
                 }
             });
