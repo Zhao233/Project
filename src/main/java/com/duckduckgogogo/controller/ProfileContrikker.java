@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,8 @@ public class ProfileContrikker {
     @PostMapping("/save")
     @ResponseBody
     public Map<String, Object> save(@Valid User user,
-                                    @RequestParam String confirmPassword)
+                                    @RequestParam String confirmPassword,
+                                    HttpServletRequest request)
             throws Exception {
         Map<String, Object> r = new HashMap<>();
 
@@ -106,7 +108,7 @@ public class ProfileContrikker {
 
         if (message.isEmpty()) {
             userService.save(user);
-
+            request.getSession().setAttribute("user", user);
             r.put("status", "SUCCEED");
         } else {
             r.put("status", "FAILED");

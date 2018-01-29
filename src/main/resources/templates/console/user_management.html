@@ -105,8 +105,8 @@
                 </div>
                 <div class="modal-body">
                     <form role="form" class="form-horizontal add-new-user" method="POST">
-                        <input type="hidden" id="id" name="id" />
-                        <input type="hidden" id="version" name="version" />
+                        <input type="text" style="display:none;" id="id" name="id" />
+                        <input type="text" style="display:none;" id="version" name="version" />
                         <div class="form-group">
                             <label for="username" class="col-sm-4 control-label">Username</label>
                             <div class="col-sm-7">
@@ -213,8 +213,6 @@
 
         function _reset(from) {
             from[0].reset();
-            // from.find("input").removeClass("alert-danger");
-            // from.find("input").tooltip('destroy');
             _reset_input(from.find("input"));
         }
 

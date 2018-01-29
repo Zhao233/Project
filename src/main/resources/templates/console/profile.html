@@ -68,8 +68,8 @@
 					<div class="panel-body">
 						<form class="form-horizontal form-profile-save" method="post">
 							<fieldset>
-                                <input type="hidden" id="id" name="id" th:value="${user.id}" />
-                                <input type="hidden" id="version" name="version" th:value="${user.version}" />
+                                <input type="text" style="display:none;" id="id" name="id" th:value="${user.id}" />
+                                <input type="text" style="display:none;" id="version" name="version" th:value="${user.version}" />
                                 <div class="form-group">
                                     <label for="username" class="col-sm-3 control-label">Username</label>
                                     <div class="col-sm-5">
