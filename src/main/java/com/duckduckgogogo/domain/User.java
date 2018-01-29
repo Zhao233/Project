@@ -132,7 +132,9 @@ public class User implements UserDetails, Serializable {
         if (version != null) this.version = version;
     }
 
-    public User clone() {
+    public User clone() throws CloneNotSupportedException {
+        super.clone();
+
         User user = new User();
 
         user.setId(Long.valueOf(this.id).intValue());

@@ -18,6 +18,7 @@ public class IndexController {
         if (request.getSession().getAttribute("user") != null) {
             return new ModelAndView("redirect:/console");
         }
+
         return new ModelAndView("login");
     }
 

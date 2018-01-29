@@ -1,11 +1,14 @@
 package com.duckduckgogogo.controller;
 
 import com.duckduckgogogo.domain.User;
+import com.duckduckgogogo.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +16,27 @@ import java.util.Map;
 @RequestMapping("/console")
 public class ConsoleController {
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping
     public ModelAndView toIndex() {
         return new ModelAndView("console/index");
     }
 
     @RequestMapping("/profile")
-    public ModelAndView toProfile() {
-        return new ModelAndView("console/profile");
+    public ModelAndView toProfile(HttpServletRequest request) throws Exception {
+        Map<String, Object> model = new HashMap<>();
+
+        User current = (User) request.getSession().getAttribute("user");
+        if (current != null) {
+            User user = userService.findById(current.getId());
+            if (user != null) user.setPassword("");
+
+            model.put("user", user);
+        }
+
+        return new ModelAndView("console/profile", model);
     }
 
     @RequestMapping("/user_management")
