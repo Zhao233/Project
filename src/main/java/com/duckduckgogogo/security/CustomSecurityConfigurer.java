@@ -1,7 +1,6 @@
 package com.duckduckgogogo.security;
 
 import com.duckduckgogogo.utils.PasswordEncodeAssistant;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -37,10 +36,13 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/**").permitAll()
-            .anyRequest().authenticated();
+                .antMatchers("/", "/style/**", "/javascript/**", "/fonts/**").permitAll() //
+                .anyRequest().authenticated() //
+            .and().formLogin().loginPage("/login").successForwardUrl("/logged").failureUrl("/?error").permitAll() //
+            .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").permitAll(); //
+
+        http.csrf().disable();
 
         super.configure(http);
     }
-
 }
