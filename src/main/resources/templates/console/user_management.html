@@ -101,6 +101,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">User Management  | <span id="dialog-user-management-update-title"></span></h4>
                 </div>
                 <div class="modal-body">
@@ -188,7 +189,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="mySmallModalLabel">WARNING</h4>
+                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
                 </div>
                 <div class="modal-body"></div>
             </div><!-- /.modal-content -->
@@ -209,7 +210,7 @@
 		$(window).on('resize', function () {
 			if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
 			else $('#sidebar-collapse').collapse('hide');
-		})
+		});
 
         function _reset(from) {
             from[0].reset();

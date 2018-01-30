@@ -130,7 +130,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="mySmallModalLabel">WARNING</h4>
+                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
                 </div>
                 <div class="modal-body"></div>
             </div><!-- /.modal-content -->
@@ -150,7 +150,7 @@
 		$(window).on('resize', function () {
 			if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
 			else $('#sidebar-collapse').collapse('hide');
-		})
+		});
 
         function _reset_input(input) {
             input.removeClass("alert-danger");
@@ -169,7 +169,7 @@
             var data = $(".form-horizontal.form-profile-save").serializeArray();
             $.post("/console/profile/save", data, function(r, status) {
                 if (r.status == "SUCCEED") {
-                    $(".bs-example-modal-sm").find(".modal-body").html("Success of personal information modification.");
+                    $(".bs-example-modal-sm").find(".modal-body").html("Modification the success.");
                     $(".bs-example-modal-sm").modal("show");
                     $('.bs-example-modal-sm').on('hidden.bs.modal', function (e) {
                         location.reload();

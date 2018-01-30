@@ -1,6 +1,9 @@
 # 适用于开发环境
 spring.profile.name: application-Dev.yml
 
+server:
+  connection-timeout: 30
+
 spring:
   #
   thymeleaf:

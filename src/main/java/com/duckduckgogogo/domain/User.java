@@ -1,15 +1,23 @@
 package com.duckduckgogogo.domain;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails, Serializable {
+
+    public final static String ROLE_ADMINISTRATOR = "A";
+    public final static String ROLE_CUSTOMER = "C";
+    public final static String ROLE_SUPPLIER = "S";
+    public final static String ROLE_PROJECT_MANAGEMENT = "PM";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -43,8 +51,8 @@ public class User implements UserDetails, Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
-        if (id != null) this.id = id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -97,7 +105,10 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(this.getRole()));
+
+        return authorities;
     }
 
     @Override
@@ -128,11 +139,11 @@ public class User implements UserDetails, Serializable {
         return version;
     }
 
-    public void setVersion(Integer version) {
-        if (version != null) this.version = version;
+    public void setVersion(int version) {
+        this.version = version;
     }
 
-    public User clone() {
+    public User converter() {
         User user = new User();
 
         user.setId(Long.valueOf(this.id).intValue());

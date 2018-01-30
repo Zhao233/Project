@@ -861,3 +861,7 @@ h1.page-header {
 .fixed-table-pagination .pagination-detail {
 	margin-top: 20px;
 }
+
+.bs-example-modal-sm {
+    margin-top: 50px;
+}

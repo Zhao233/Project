@@ -42,13 +42,11 @@ public class UserManagementController {
 
     @PostMapping("/save")
     @ResponseBody
-    public Map<String, Object> save(@Valid User user,
-                                    @RequestParam String confirmPassword)
-            throws Exception {
+    public Map<String, Object> save(@Valid User user, @RequestParam String confirmPassword) throws Exception {
         Map<String, Object> r = new HashMap<>();
 
         Map<String, String> message = new HashMap<>();
-        user = user.clone();
+        user = user.converter();
         // "FAILED" "SUCCEED"
         User mark = userService.findById(user.getId());
         User logged = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
