@@ -39,13 +39,36 @@ public class ConsoleController {
         return new ModelAndView("console/profile", model);
     }
 
+    /**
+     * PROJECT MANAGEMENT
+     */
+    @RequestMapping("/task_allocation")
+    public ModelAndView toTaskAllocation() {
+        return new ModelAndView("console/task_allocation");
+    }
+
+    /**
+     * ADMINISTRATOR)
+     */
     @RequestMapping("/user_management")
     public ModelAndView toUserManagement() {
         return new ModelAndView("console/user_management");
     }
 
+    /**
+     * CUSTOMER
+     */
     @RequestMapping("/task_schedule_tracking")
     public ModelAndView toTaskScheduleTracking() {
         return new ModelAndView("console/task_schedule_tracking");
     }
+
+    /**
+     * SUPPLIER
+     */
+    @RequestMapping("/task_management")
+    public ModelAndView toTaskManagement() {
+        return new ModelAndView("console/task_management");
+    }
+
 }

@@ -65,8 +65,8 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <button class="btn btn-primary dialog-add-new-user" data-toggle="modal">Add New User</button>
-                        <button class="btn btn-default dialog-update-user" data-toggle="modal">Update User</button>
+                        <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New User</button>
+                        <button class="btn btn-default open-update-use-dialogr" data-toggle="modal">Update User</button>
                     </div>
                     <div class="panel-body">
                         <table data-toggle="table"
@@ -175,7 +175,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                                 <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary add-new-user">Save changes</button>
+                                <button type="button" class="btn btn-primary add-new-user">Save Changes</button>
                             </div>
                         </div>
                     </form>
@@ -228,13 +228,13 @@
             el.tooltip('show');
         }
 
-        $(".btn.btn-primary.dialog-add-new-user").click(function() {
+        $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
             _reset($(".form-horizontal.add-new-user"));
             $("#dialog-user-management-update-title").html("Add new user");
             $("#dialog-user-management-update").modal("show");
         });
 
-        $(".btn.btn-default.dialog-update-user").click(function() {
+        $(".btn.btn-default.open-update-use-dialogr").click(function() {
             var id = $("input[type='radio']:checked").val();
 		    if (id != undefined) {
                 _reset($(".form-horizontal.add-new-user"));

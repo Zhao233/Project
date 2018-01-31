@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/console/profile")
-public class ProfileContrikker {
+public class ProfileContriller {
 
     @Autowired
     private UserService userService;

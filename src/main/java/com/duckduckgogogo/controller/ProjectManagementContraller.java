@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/console/task_schedule_tracking")
-public class TaskScheduleTrackingContraller {
+@RequestMapping("/console/project_management")
+public class ProjectManagementContraller {
     @Autowired
     private ProjectService projectService;
 
@@ -30,7 +30,6 @@ public class TaskScheduleTrackingContraller {
         if ("".equals(q.trim())) {
             pg = projectService.findAll(pageable);
         } else {
-            // pg = userService.findByUsernameOrFirstNameOrLastNameOrEmail(q, q, q, q, pageable);
             pg = projectService.findAll(q, pageable);
         }
 

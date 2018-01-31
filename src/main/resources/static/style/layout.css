@@ -6,6 +6,7 @@ body {
 	background: #f1f4f7;
 	padding-top: 50px;
 	color: #5f6468;
+	font-size: 15px;
 }
 
 p {
@@ -864,4 +865,8 @@ h1.page-header {
 
 .bs-example-modal-sm {
     margin-top: 50px;
+}
+
+.dropdown-menu {
+    min-width: 180px;
 }

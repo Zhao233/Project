@@ -51,8 +51,8 @@ public class User implements UserDetails, Serializable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(Long id) {
+        if (id != null) this.id = id;
     }
 
     public String getUsername() {
@@ -105,10 +105,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(this.getRole()));
-
-        return authorities;
+        return null;
     }
 
     @Override
@@ -139,14 +136,14 @@ public class User implements UserDetails, Serializable {
         return version;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void setVersion(Integer version) {
+        if (version != null) this.version = version;
     }
 
     public User converter() {
         User user = new User();
 
-        user.setId(Long.valueOf(this.id).intValue());
+        user.setId(this.id);
         user.setUsername(this.username.trim().toLowerCase());
         user.setFirstName(this.firstName.trim());
         user.setLastName(this.lastName.trim());

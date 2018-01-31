@@ -33,7 +33,6 @@ public class UserManagementController {
         if ("".equals(q.trim())) {
             pg = userService.findAll(pageable);
         } else {
-            // pg = userService.findByUsernameOrFirstNameOrLastNameOrEmail(q, q, q, q, pageable);
             pg = userService.findAll(q, pageable);
         }
 
