@@ -6,7 +6,7 @@ logging:
   # 日志文件输出路径
   file: 'logs/HELLOWORLD_stdout.log'
   # 日志文件输出格式
-  config: 'classpath:configuration/logback.xml'
+  config: 'classpath:configurations/logback.xml'
   # 设置日志输出级别
   level:
     root: WARN # root日志级别为WARN

@@ -1,4 +1,4 @@
-package com.duckduckgogogo.security;
+package com.duckduckgogogo.configurer;
 
 import com.duckduckgogogo.domain.User;
 import org.springframework.context.annotation.Configuration;

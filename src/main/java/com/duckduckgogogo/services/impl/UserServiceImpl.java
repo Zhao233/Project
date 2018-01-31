@@ -7,4 +7,5 @@ import javax.transaction.Transactional;
 
 @Service("userService")
 @Transactional
-public abstract class UserServiceImpl implements UserService {}
+public abstract class UserServiceImpl implements UserService {
+}
