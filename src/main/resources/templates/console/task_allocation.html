@@ -6,7 +6,7 @@
 	<title>HELLOWORLD</title>
 
 	<link href="/style/bootstrap.min.css" rel="stylesheet" />
-    <link href="/style/bootstrap-table.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
 	<link href="/style/layout.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
@@ -66,35 +66,39 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <button class="btn btn-primary btn-assign" data-toggle="modal">Assign</button>
-                        <button class="btn btn-default btn-re-open" data-toggle="modal">Re Open</button>
-                        <button class="btn btn-default btn-push-back" data-toggle="modal">Push Back</button>
+                        <button class="btn btn-default btn-re-open">Re Open</button>
+                        <button class="btn btn-default btn-push-back">Push Back</button>
                     </div>
                     <div class="panel-body">
                         <table data-toggle="table"
                                data-url="/console/project_management/search"
+                               data-method="get"
+                               data-striped="true"
                                data-show-refresh="true"
                                data-show-toggle="false"
                                data-show-columns="true"
                                data-search="true"
-                               data-select-item-name="toolbar1"
                                data-pagination="true"
-                               data-sort-name="id"
-                               data-sort-order="DESC">
+                               data-sidePagination="client"
+                               data-sortable="true"
+                               data-cache="false"
+                               data-sort-name="name"
+                               data-idField="id">
                             <thead>
                                 <tr>
-                                    <th data-field="id" data-radio="true">ID</th>
+                                    <th data-field="id" data-formatter="_formatte_project_id" data-align="center"></th>
                                     <th data-field="name"  data-sortable="true">Name</th>
                                     <th data-field="worldId" data-sortable="true">World Id</th>
                                     <th data-field="locale" data-sortable="true">Locale</th>
                                     <th data-field="state" data-sortable="true">State</th>
                                     <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
                                     <th data-field="supplierName" data-sortable="true">Supplier</th>
-                                    <th data-field="creation"  data-sortable="true">Creation Date</th>
-                                    <th data-field="assinged" data-sortable="true">Assinged Date</th>
-                                    <th data-field="checkin" data-sortable="true">Checkin Date</th>
-                                    <th data-field="Pushback" data-sortable="true">Pushback Date</th>
-                                    <th data-field="sourceFileUrl" data-sortable="true">Source File</th>
-                                    <th data-field="translateFileUrl" data-sortable="true">Translate File</th>
+									<th data-field="sourceFileUrl" data-sortable="true">Source File</th>
+									<th data-field="translateFileUrl" data-sortable="true">Translate File</th>
+                                    <th data-field="creation" data-formatter="_formatte_locale_id" data-sortable="true">Creation Date</th>
+                                    <th data-field="assinged" data-formatter="_formatte_locale_id" data-sortable="true">Assinged Date</th>
+                                    <th data-field="checkin" data-formatter="_formatte_locale_id" data-sortable="true">Checkin Date</th>
+                                    <th data-field="pushback" data-formatter="_formatte_locale_id" data-sortable="true">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -104,9 +108,113 @@
         </div><!--/.row-->
 	</div>	<!--/.main-->
 
+	<div id="dialog-task-allocation-assign" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Task Allocation  | <span id="dialog-task-allocation-assign-title"></span></h4>
+				</div>
+				<div class="modal-body">
+					<form role="form" class="form-horizontal form-task-allocation-assign" method="POST">
+						<input type="text" style="display:none;" id="id" name="id" />
+                        <input type="text" style="display:none;" id="version" name="version" />
+                        <input type="text" style="display:none;" id="supplier" name="supplier" />
+						<div class="form-group">
+							<label for="name" class="col-sm-3 control-label">Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="name" name="name" readonly="readonly" />
+							</div>
+							<div class="col-sm-2"></div>
+						</div>
+                        <div class="form-group">
+                            <label for="worldId" class="col-sm-3 control-label">World Id</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="worldId" name="worldId" readonly="readonly" />
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="locale" class="col-sm-3 control-label">Locale</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="locale" name="locale" readonly="readonly" />
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="state" class="col-sm-3 control-label">State</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="state" name="state" readonly="readonly" />
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+						<div class="form-group">
+							<div class="col-sm-22">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Supplier List</div>
+                                    <div class="panel-body">
+                                        <table data-toggle="table"
+                                               data-url="/console/project_management/supplier_list"
+                                               data-method="get"
+                                               data-striped="true"
+                                               data-show-refresh="true"
+                                               data-show-toggle="false"
+                                               data-show-columns="true"
+                                               data-search="true"
+                                               data-pagination="true"
+                                               data-sidePagination="client"
+                                               data-sortable="true"
+                                               data-cache="false"
+                                               data-sort-name="username"
+                                               data-idField="id">
+                                            <thead>
+                                            <tr>
+                                                <th data-field="id" data-formatter="_formatte_supplier_id" data-align="center"></th>
+                                                <th data-field="firstName" data-sortable="true">First Name</th>
+                                                <th data-field="lastName" data-sortable="true">Last Name</th>
+                                                <th data-field="email"  data-sortable="true">Email</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-9" style="text-align: right;">
+								<button type="button" class="btn btn-default form-task-allocation-assign-close" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary form-task-allocation-assign-submit">Save Changes</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer modal-footer-reopen-confirm" style="display:none;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-task-reopen-confirm" data-dismiss="modal">Confirm</button>
+                </div>
+                <div class="modal-footer modal-footer-pushback-confirm" style="display:none;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-task-pushback-confirm" data-dismiss="modal">Confirm</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
    	<script src="/javascript/jquery-1.11.1.min.js"></script>
 	<script src="/javascript/bootstrap.min.js"></script>
-    <script src="/javascript/bootstrap-table.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
 	<script>
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
@@ -120,6 +228,170 @@
 			else $('#sidebar-collapse').collapse('hide');
 		});
 
+		function sleep(numberMillis) {
+            var now = new Date();
+            var exitTime = now.getTime() + numberMillis;
+            while (true) {
+                now = new Date();
+                if (now.getTime() > exitTime) return;
+            }
+        }
+
+		function _formatte_project_id(value, row, index) {
+		    return '<input name="_project_id" type="radio" value="' + value + '" />';
+		}
+
+		function _formatte_supplier_id(value, row, index) {
+		    return '<input name="_supplier_id" type="radio" value="' + value + '" />';
+		}
+
+		function _formatte_locale_id(value, row, index) {
+		    if (value > 0) {
+		        var d = new Date(value);
+		        return d.toLocaleString();
+		    }
+		     return "-";
+		}
+
+		function _reset(from) {
+            from[0].reset();
+        }
+
+		$(".btn.btn-primary.btn-assign").click(function() {
+            _reset($(".form-horizontal.form-task-allocation-assign"));
+
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                // 读取Project选中的用户信息
+                $.get("/console/project_management/get/" + id, null, function(r, status) {
+                    var form = $(".form-horizontal.form-task-allocation-assign");
+                    form.find("input[id='id']").val(r.id);
+                    form.find("input[id='version']").val(r.version);
+                    form.find("input[id='name']").val(r.name);
+                    form.find("input[id='worldId']").val(r.worldId);
+                    form.find("input[id='locale']").val(r.locale);
+                    form.find("input[id='state']").val(r.state);
+
+                    $("#dialog-task-allocation-assign-title").html("Assign supplier");
+                    $("#dialog-task-allocation-assign").modal("show");
+                });
+		    } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".form-task-allocation-assign-submit").click(function() {
+            var supplier = $("input[name='_supplier_id']:checked").val();
+            if (supplier != undefined) {
+                $(".form-horizontal.form-task-allocation-assign").find("input[id='supplier']").val(supplier);
+            } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the supplier.");
+		        $(".bs-example-modal-sm").modal("show");
+
+		        return;
+            }
+
+            var data = $(".form-task-allocation-assign").serializeArray();
+            $.post("/console/project_management/assign_to", data, function(r, status) {
+                if (r.status == "SUCCEED") {
+                    $(".bs-example-modal-sm").find(".modal-body").html("Assign supplier succeed.");
+                    $(".bs-example-modal-sm").modal("show");
+                    $(".btn.btn-default.form-task-allocation-assign-close").click();
+
+                    $(".panel.panel-default").find("button[name='refresh']").click();
+                } else {
+                    if (r.message.WARNING) {
+                        $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                        $(".bs-example-modal-sm").modal("show");
+                    }
+                }
+            });
+        });
+
+        $(".bs-example-modal-sm").on('hide.bs.modal', function (e) {
+            $(".bs-example-modal-sm").find(".modal-footer-reopen-confirm").css("display", "none");
+            $(".bs-example-modal-sm").find(".modal-footer-pushback-confirm").css("display", "none");
+
+            $(".modal-backdrop.fade.in").remove();
+        })
+
+        $(".btn-re-open").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                // 读取Project选中的用户信息
+                $.get("/console/project_management/get/" + id, null, function(r, status) {
+                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure the \"Re Open\" " + r.name + " project?");
+		            $(".bs-example-modal-sm").find(".modal-footer-reopen-confirm").css("display", "");
+                    $(".bs-example-modal-sm").modal("show");
+                });
+		    } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn-task-reopen-confirm").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                var data = {"id": id};
+                $.post("/console/project_management/re_open", data, function(r, status) {
+                    if (r.status == "SUCCEED") {
+                        $(".bs-example-modal-sm").find(".modal-body").html("Re open succeed.");
+                        $(".bs-example-modal-sm").modal("show");
+
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+                    } else {
+                        if (r.message.WARNING) {
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
+                        }
+                    }
+                });
+            } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+
+        $(".btn-push-back").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                // 读取Project选中的用户信息
+                $.get("/console/project_management/get/" + id, null, function(r, status) {
+                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure the \"Push Back\" " + r.name + " project?");
+		            $(".bs-example-modal-sm").find(".modal-footer-pushback-confirm").css("display", "");
+                    $(".bs-example-modal-sm").modal("show");
+                });
+		    } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn-task-pushback-confirm").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                var data = {"id": id};
+                $.post("/console/project_management/push_back", data, function(r, status) {
+                    if (r.status == "SUCCEED") {
+                        $(".bs-example-modal-sm").find(".modal-body").html("Push back succeed.");
+                        $(".bs-example-modal-sm").modal("show");
+
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+                    } else {
+                        if (r.message.WARNING) {
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
+                        }
+                    }
+                });
+            } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
 	</script>	
 </body>
 </html>

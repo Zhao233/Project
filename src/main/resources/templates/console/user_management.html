@@ -6,7 +6,7 @@
 	<title>HELLOWORLD</title>
 
 	<link href="/style/bootstrap.min.css" rel="stylesheet" />
-    <link href="/style/bootstrap-table.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
 	<link href="/style/layout.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
@@ -66,22 +66,26 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New User</button>
-                        <button class="btn btn-default open-update-use-dialogr" data-toggle="modal">Update User</button>
+                        <button class="btn btn-default open-update-use-dialog" data-toggle="modal">Update User</button>
                     </div>
                     <div class="panel-body">
                         <table data-toggle="table"
                                data-url="/console/user_management/search"
+                               data-method="get"
+                               data-striped="true"
                                data-show-refresh="true"
                                data-show-toggle="false"
                                data-show-columns="true"
                                data-search="true"
-                               data-select-item-name="toolbar1"
                                data-pagination="true"
-                               data-sort-name="id"
-                               data-sort-order="DESC">
+                               data-sidePagination="client"
+                               data-sortable="true"
+                               data-cache="false"
+                               data-sort-name="username"
+                               data-idField="id">
                             <thead>
                                 <tr>
-                                    <th data-field="id" data-radio="true">ID</th>
+                                    <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
                                     <th data-field="username"  data-sortable="true">Username</th>
                                     <th data-field="firstName" data-sortable="true">First Name</th>
                                     <th data-field="lastName" data-sortable="true">Last Name</th>
@@ -198,7 +202,7 @@
 
    	<script src="/javascript/jquery-1.11.1.min.js"></script>
 	<script src="/javascript/bootstrap.min.js"></script>
-    <script src="/javascript/bootstrap-table.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
 	<script>
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
@@ -211,6 +215,10 @@
 			if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
 			else $('#sidebar-collapse').collapse('hide');
 		});
+
+		function _formatte_user_id(value, row, index) {
+		    return '<input name="id" type="radio" value="' + value + '" />';
+		}
 
         function _reset(from) {
             from[0].reset();
@@ -234,7 +242,7 @@
             $("#dialog-user-management-update").modal("show");
         });
 
-        $(".btn.btn-default.open-update-use-dialogr").click(function() {
+        $(".btn.btn-default.open-update-use-dialog").click(function() {
             var id = $("input[type='radio']:checked").val();
 		    if (id != undefined) {
                 _reset($(".form-horizontal.add-new-user"));

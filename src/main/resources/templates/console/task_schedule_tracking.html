@@ -6,7 +6,7 @@
 	<title>HELLOWORLD</title>
 
 	<link href="/style/bootstrap.min.css" rel="stylesheet" />
-    <link href="/style/bootstrap-table.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
 	<link href="/style/layout.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
@@ -67,14 +67,18 @@
                     <div class="panel-body">
                         <table data-toggle="table"
                                data-url="/console/project_management/search"
-                               data-show-refresh="true"
-                               data-show-toggle="false"
-                               data-show-columns="true"
-                               data-search="true"
-                               data-select-item-name="toolbar1"
-                               data-pagination="true"
-                               data-sort-name="id"
-                               data-sort-order="DESC">
+							   data-method="get"
+							   data-striped="true"
+							   data-show-refresh="true"
+							   data-show-toggle="false"
+							   data-show-columns="true"
+							   data-search="true"
+							   data-pagination="true"
+							   data-sidePagination="client"
+							   data-sortable="true"
+							   data-cache="false"
+							   data-sort-name="name"
+							   data-idField="id">
                             <thead>
                                 <tr>
                                     <th data-field="index" data-formatter="_index_formatter">#</th>
@@ -84,10 +88,10 @@
                                     <th data-field="state" data-sortable="true">State</th>
                                     <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
                                     <th data-field="supplierName" data-sortable="true">Supplier</th>
-                                    <th data-field="creation"  data-sortable="true">Creation Date</th>
-                                    <th data-field="assinged" data-sortable="true">Assinged Date</th>
-                                    <th data-field="checkin" data-sortable="true">Checkin Date</th>
-                                    <th data-field="Pushback" data-sortable="true">Pushback Date</th>
+									<th data-field="creation" data-formatter="_formatte_locale_id" data-sortable="true">Creation Date</th>
+									<th data-field="assinged" data-formatter="_formatte_locale_id" data-sortable="true">Assinged Date</th>
+									<th data-field="checkin" data-formatter="_formatte_locale_id" data-sortable="true">Checkin Date</th>
+									<th data-field="pushback" data-formatter="_formatte_locale_id" data-sortable="true">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -99,7 +103,7 @@
 
    	<script src="/javascript/jquery-1.11.1.min.js"></script>
 	<script src="/javascript/bootstrap.min.js"></script>
-    <script src="/javascript/bootstrap-table.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
 	<script>
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
@@ -116,6 +120,14 @@
         function _index_formatter(value, row, index) {
             return index + 1;
         }
+
+		function _formatte_locale_id(value, row, index) {
+		    if (value > 0) {
+		        var d = new Date(value);
+		        return d.toLocaleString();
+		    }
+		     return "-";
+		}
 	</script>	
 </body>
 </html>

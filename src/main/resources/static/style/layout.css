@@ -22,7 +22,6 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
 	font-weight: 300;
-	font-size: 40px;
 }
 
 h2 {
@@ -837,7 +836,7 @@ h1.page-header {
 	border-color: #ddd;
 	color: #5f6468;
 	font-weight: 300;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .fixed-table-container tbody td {

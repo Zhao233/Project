@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -25,18 +26,9 @@ public class UserManagementController {
 
     @RequestMapping("/search")
     @ResponseBody
-    public Page<User> search(@RequestParam(value = "q", defaultValue = "") String q,
-                             @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
-        Pageable pageable = new PageRequest(offset, limit, new Sort(Sort.Direction.DESC, "id"));
-        Page<User> pg;
-        if ("".equals(q.trim())) {
-            pg = userService.findAll(pageable);
-        } else {
-            pg = userService.findAll(q, pageable);
-        }
-
-        return pg;
+    public List<User> search() {
+        List<User> users = userService.findAll();
+        return users;
     }
 
     @PostMapping("/save")

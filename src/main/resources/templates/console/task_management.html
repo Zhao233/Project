@@ -6,7 +6,7 @@
 	<title>HELLOWORLD</title>
 
 	<link href="/style/bootstrap.min.css" rel="stylesheet" />
-    <link href="/style/bootstrap-table.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
 	<link href="/style/layout.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
@@ -39,8 +39,8 @@
 		<ul class="nav menu">
 			<li th:if="${session.user.role} == 'A'"><a href="/console/user_management"><span class="glyphicon glyphicon-user"></span> User management</a></li>
 			<li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
-			<li class="active" th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
-			<li th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
+			<li th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
+			<li class="active" th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
 			<li role="presentation" class="divider"></li>
             <li><a href="/console/profile"><span class="glyphicon glyphicon-cog"></span> Profile</a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -70,30 +70,34 @@
                     </div>
                     <div class="panel-body">
                         <table data-toggle="table"
-                               data-url="/console/project_management/search"
-                               data-show-refresh="true"
-                               data-show-toggle="false"
-                               data-show-columns="true"
-                               data-search="true"
-                               data-select-item-name="toolbar1"
-                               data-pagination="true"
-                               data-sort-name="id"
-                               data-sort-order="DESC">
+                               data-url="/console/project_management/task_list"
+							   data-method="get"
+							   data-striped="true"
+							   data-show-refresh="true"
+							   data-show-toggle="false"
+							   data-show-columns="true"
+							   data-search="true"
+							   data-pagination="true"
+							   data-sidePagination="client"
+							   data-sortable="true"
+							   data-cache="false"
+							   data-sort-name="name"
+							   data-idField="id">
                             <thead>
                                 <tr>
-                                    <th data-field="id" data-radio="true">ID</th>
+									<th data-field="id" data-formatter="_formatte_project_id" data-align="center"></th>
                                     <th data-field="name"  data-sortable="true">Name</th>
                                     <th data-field="worldId" data-sortable="true">World Id</th>
                                     <th data-field="locale" data-sortable="true">Locale</th>
                                     <th data-field="state" data-sortable="true">State</th>
                                     <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
                                     <th data-field="supplierName" data-sortable="true">Supplier</th>
-                                    <th data-field="creation"  data-sortable="true">Creation Date</th>
-                                    <th data-field="assinged" data-sortable="true">Assinged Date</th>
-                                    <th data-field="checkin" data-sortable="true">Checkin Date</th>
-                                    <th data-field="Pushback" data-sortable="true">Pushback Date</th>
-                                    <th data-field="sourceFileUrl" data-sortable="true">Source File</th>
-                                    <th data-field="translateFileUrl" data-sortable="true">Translate File</th>
+									<th data-field="sourceFileUrl" data-sortable="true">Source File</th>
+									<th data-field="translateFileUrl" data-sortable="true">Translate File</th>
+                                    <th data-field="creation" data-formatter="_formatte_locale_id" data-sortable="true">Creation Date</th>
+                                    <th data-field="assinged" data-formatter="_formatte_locale_id" data-sortable="true">Assinged Date</th>
+                                    <th data-field="checkin" data-formatter="_formatte_locale_id" data-sortable="true">Checkin Date</th>
+                                    <th data-field="pushback" data-formatter="_formatte_locale_id" data-sortable="true">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -103,9 +107,30 @@
         </div><!--/.row-->
 	</div>	<!--/.main-->
 
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer modal-footer-commit-confirm" style="display:none;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-task-commit-confirm" data-dismiss="modal">Confirm</button>
+                </div>
+                <div class="modal-footer modal-footer-checkin-confirm" style="display:none;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-task-checkin-confirm" data-dismiss="modal">Confirm</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
    	<script src="/javascript/jquery-1.11.1.min.js"></script>
 	<script src="/javascript/bootstrap.min.js"></script>
-    <script src="/javascript/bootstrap-table.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
 	<script>
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
@@ -119,6 +144,62 @@
 			else $('#sidebar-collapse').collapse('hide');
 		});
 
+		function _formatte_project_id(value, row, index) {
+		    return '<input name="_project_id" type="radio" value="' + value + '" />';
+		}
+
+		function _formatte_locale_id(value, row, index) {
+		    if (value > 0) {
+		        var d = new Date(value);
+		        return d.toLocaleString();
+		    }
+		     return "-";
+		}
+
+        $(".bs-example-modal-sm").on('hide.bs.modal', function (e) {
+            $(".bs-example-modal-sm").find(".modal-footer-commit-confirm").css("display", "none");
+            $(".bs-example-modal-sm").find(".modal-footer-checkin-confirm").css("display", "none");
+
+            $(".modal-backdrop.fade.in").remove();
+        })
+
+		$(".btn.btn-primary.btn-commit").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                // 读取Project选中的用户信息
+                $.get("/console/project_management/get/" + id, null, function(r, status) {
+                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure the \"Commit\" " + r.name + " project?");
+		            $(".bs-example-modal-sm").find(".modal-footer-commit-confirm").css("display", "");
+                    $(".bs-example-modal-sm").modal("show");
+                });
+		    } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn-task-commit-confirm").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                var data = {"id": id};
+                $.post("/console/project_management/commit", data, function(r, status) {
+                    if (r.status == "SUCCEED") {
+                        $(".bs-example-modal-sm").find(".modal-body").html("Commit succeed.");
+                        $(".bs-example-modal-sm").modal("show");
+
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+                    } else {
+                        if (r.message.WARNING) {
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
+                        }
+                    }
+                });
+            } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
 	</script>	
 </body>
 </html>
