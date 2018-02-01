@@ -69,29 +69,16 @@
                         <button class="btn btn-default open-update-use-dialog" data-toggle="modal">Update User</button>
                     </div>
                     <div class="panel-body">
-                        <table data-toggle="table"
-                               data-url="/console/user_management/search"
-                               data-method="get"
-                               data-striped="true"
-                               data-show-refresh="true"
-                               data-show-toggle="false"
-                               data-show-columns="true"
-                               data-search="true"
-                               data-pagination="true"
-                               data-sidePagination="client"
-                               data-sortable="true"
-                               data-cache="false"
-                               data-sort-name="username"
-                               data-idField="id">
+                        <table id="_table_user_search">
                             <thead>
                                 <tr>
                                     <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                    <th data-field="username"  data-sortable="true">Username</th>
-                                    <th data-field="firstName" data-sortable="true">First Name</th>
-                                    <th data-field="lastName" data-sortable="true">Last Name</th>
-                                    <th data-field="email"  data-sortable="true">Email</th>
-                                    <th data-field="role" data-sortable="true">Role</th>
-                                    <th data-field="enabled" data-sortable="true">Enabled</th>
+                                    <th data-field="username">Username</th>
+                                    <th data-field="firstName">First Name</th>
+                                    <th data-field="lastName">Last Name</th>
+                                    <th data-field="email">Email</th>
+                                    <th data-field="role">Role</th>
+                                    <th data-field="enabled">Enabled</th>
                                 </tr>
                             </thead>
                         </table>
@@ -299,6 +286,38 @@
                         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
                         $(".bs-example-modal-sm").modal("show");
                     }
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            $('#_table_user_search').bootstrapTable({
+                method: 'get',
+                url: "/console/user_management/search",
+                striped: true,
+                dataType: "json",
+                pagination: true,
+                queryParamsType: "limit",
+                singleSelect: true,
+                contentType: "application/x-www-form-urlencoded",
+                pageSize: 10,
+                pageNumber:1,
+                search: true,
+                showColumns: true,
+                showRefresh: true,
+                sidePagination: "server", //服务端请求
+                queryParams: function(params) {
+                    return {
+                        limit: params.limit,
+                        offset: params.offset / params.limit,
+                        search: $(".search").find("input").val()
+                    };
+                },
+                responseHandler: function(res) {
+                    return {
+                        "rows": res.rows,
+                        "total": res.total
+                    };
                 }
             });
         });

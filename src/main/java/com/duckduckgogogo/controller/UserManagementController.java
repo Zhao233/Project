@@ -26,9 +26,23 @@ public class UserManagementController {
 
     @RequestMapping("/search")
     @ResponseBody
-    public List<User> search() {
-        List<User> users = userService.findAll();
-        return users;
+    public Map<String, Object> search(@RequestParam(value = "search", defaultValue = "") String search,
+                                      @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                      @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        Map<String, Object> p = new HashMap<>();
+
+        Pageable pageable = new PageRequest(offset, limit, new Sort(Sort.Direction.DESC, "id"));
+        Page<User> page;
+        if ("".equals(search.trim())) {
+            page = userService.findAll(pageable);
+        } else {
+            page = userService.findAll(search, pageable);
+        }
+
+        p.put("total", page != null ? page.getTotalElements() : 0);
+        p.put("rows", page.getContent());
+
+        return p;
     }
 
     @PostMapping("/save")

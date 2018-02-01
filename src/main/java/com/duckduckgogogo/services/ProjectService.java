@@ -12,7 +12,10 @@ import java.util.List;
 public interface ProjectService extends JpaRepository<Project, Long> {
     Project findById(long id);
 
-    List<Project> findBySupplier(User supplier);
+    @Query("select project from Project project "
+            + " where project.id in(select psr.id.project_id from ProjectSupplierRelation psr where psr.id.user_id = ?1 and psr.state is null) "
+            + " or project.supplier.id = ?1")
+    List<Project> findBySupplier(long uid);
 
     @Query("select project from Project project "
             + " where project.name like %?1% or project.worldId like %?1% "

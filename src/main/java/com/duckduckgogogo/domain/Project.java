@@ -2,6 +2,7 @@ package com.duckduckgogogo.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "PROJECTS")
@@ -66,6 +67,12 @@ public class Project {
     @OneToOne
     @JoinColumn(name="ASSIGNED_TO")
     private User supplier;
+
+    @OneToMany
+    @JoinTable(name = "PROJECT_ASSIGNED_TO_SUPPLIER",
+            joinColumns = {@JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
+    private Set<User> suppliers;
     /**
      * 项目状态（1,Not Assign;2,Assigned;3,In Progress;4,Pending;5,Completed）
      */
@@ -179,7 +186,7 @@ public class Project {
     }
 
     public String getProjectManagerName() {
-        return this.projectManager.getFirstName() + " " + this.projectManager.getLastName();
+        return this.projectManager != null ? this.projectManager.getFirstName() + " " + this.projectManager.getLastName() : "";
     }
 
     public User getSupplier() {
@@ -191,7 +198,25 @@ public class Project {
     }
 
     public String getSupplierName() {
-        return this.supplier.getFirstName() + " " + this.supplier.getLastName();
+        String supplierName = "";
+        if (this.supplier != null) {
+            supplierName = this.supplier.getFirstName() + " " + this.supplier.getLastName();
+        } else if (this.suppliers != null) {
+            for (User user : this.suppliers) {
+                if (!supplierName.isEmpty()) supplierName += "<br/>";
+                supplierName += user.getFirstName() + " " + user.getLastName();
+            }
+        }
+
+        return supplierName;
+    }
+
+    public Set<User> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(Set<User> suppliers) {
+        this.suppliers = suppliers;
     }
 
     public String getState() {

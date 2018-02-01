@@ -87,11 +87,11 @@
                                     <th data-field="locale" data-sortable="true">Locale</th>
                                     <th data-field="state" data-sortable="true">State</th>
                                     <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
-                                    <th data-field="supplierName" data-sortable="true">Supplier</th>
-									<th data-field="creation" data-formatter="_formatte_locale_id" data-sortable="true">Creation Date</th>
-									<th data-field="assinged" data-formatter="_formatte_locale_id" data-sortable="true">Assinged Date</th>
-									<th data-field="checkin" data-formatter="_formatte_locale_id" data-sortable="true">Checkin Date</th>
-									<th data-field="pushback" data-formatter="_formatte_locale_id" data-sortable="true">Pushback Date</th>
+									<th data-field="supplierName" data-sortable="false" data-formatter="_formatte_supplier_name">Supplier</th>
+									<th data-field="creation" data-formatter="_formatte_locale_date" data-sortable="true">Creation Date</th>
+									<th data-field="assinged" data-formatter="_formatte_locale_date" data-sortable="true">Assinged Date</th>
+									<th data-field="checkin" data-formatter="_formatte_locale_date" data-sortable="true">Checkin Date</th>
+									<th data-field="pushback" data-formatter="_formatte_locale_date" data-sortable="true">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -121,12 +121,16 @@
             return index + 1;
         }
 
-		function _formatte_locale_id(value, row, index) {
+		function _formatte_locale_date(value, row, index) {
 		    if (value > 0) {
 		        var d = new Date(value);
 		        return d.toLocaleString();
 		    }
 		     return "-";
+		}
+
+		function _formatte_supplier_name(value, row, index) {
+		    return '<div style="min-width: 150px;">' + value + '</div>';
 		}
 	</script>	
 </body>

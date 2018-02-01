@@ -67,7 +67,7 @@
                     <div class="panel-heading">
                         <button class="btn btn-primary btn-assign" data-toggle="modal">Assign</button>
                         <button class="btn btn-default btn-re-open">Re Open</button>
-                        <button class="btn btn-default btn-push-back">Push Back</button>
+                        <button class="btn btn-success btn-push-back">Push Back</button>
                     </div>
                     <div class="panel-body">
                         <table data-toggle="table"
@@ -92,13 +92,13 @@
                                     <th data-field="locale" data-sortable="true">Locale</th>
                                     <th data-field="state" data-sortable="true">State</th>
                                     <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
-                                    <th data-field="supplierName" data-sortable="true">Supplier</th>
+                                    <th data-field="supplierName" data-sortable="false" data-formatter="_formatte_supplier_name">Supplier</th>
 									<th data-field="sourceFileUrl" data-sortable="true">Source File</th>
 									<th data-field="translateFileUrl" data-sortable="true">Translate File</th>
-                                    <th data-field="creation" data-formatter="_formatte_locale_id" data-sortable="true">Creation Date</th>
-                                    <th data-field="assinged" data-formatter="_formatte_locale_id" data-sortable="true">Assinged Date</th>
-                                    <th data-field="checkin" data-formatter="_formatte_locale_id" data-sortable="true">Checkin Date</th>
-                                    <th data-field="pushback" data-formatter="_formatte_locale_id" data-sortable="true">Pushback Date</th>
+                                    <th data-field="creation" data-formatter="_formatte_locale_date" data-sortable="true">Creation Date</th>
+                                    <th data-field="assinged" data-formatter="_formatte_locale_date" data-sortable="true">Assinged Date</th>
+                                    <th data-field="checkin" data-formatter="_formatte_locale_date" data-sortable="true">Checkin Date</th>
+                                    <th data-field="pushback" data-formatter="_formatte_locale_date" data-sortable="true">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -228,15 +228,6 @@
 			else $('#sidebar-collapse').collapse('hide');
 		});
 
-		function sleep(numberMillis) {
-            var now = new Date();
-            var exitTime = now.getTime() + numberMillis;
-            while (true) {
-                now = new Date();
-                if (now.getTime() > exitTime) return;
-            }
-        }
-
 		function _formatte_project_id(value, row, index) {
 		    return '<input name="_project_id" type="radio" value="' + value + '" />';
 		}
@@ -245,12 +236,16 @@
 		    return '<input name="_supplier_id" type="radio" value="' + value + '" />';
 		}
 
-		function _formatte_locale_id(value, row, index) {
+		function _formatte_locale_date(value, row, index) {
 		    if (value > 0) {
 		        var d = new Date(value);
 		        return d.toLocaleString();
 		    }
 		     return "-";
+		}
+
+		function _formatte_supplier_name(value, row, index) {
+		    return '<div style="min-width: 150px;">' + value + '</div>';
 		}
 
 		function _reset(from) {

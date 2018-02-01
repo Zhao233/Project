@@ -65,8 +65,9 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <button class="btn btn-primary btn-commit" data-toggle="modal">Commit</button>
-                        <button class="btn btn-default btn-check-in" data-toggle="modal">Check In</button>
+                        <button class="btn btn-default btn-rejet" data-toggle="modal">Rejet</button>
+                        <button class="btn btn-success btn-commit" data-toggle="modal">Commit</button>
+                        <button class="btn btn-primary btn-check-in" data-toggle="modal">Check In</button>
                     </div>
                     <div class="panel-body">
                         <table data-toggle="table"
@@ -91,13 +92,13 @@
                                     <th data-field="locale" data-sortable="true">Locale</th>
                                     <th data-field="state" data-sortable="true">State</th>
                                     <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
-                                    <th data-field="supplierName" data-sortable="true">Supplier</th>
-									<th data-field="sourceFileUrl" data-sortable="true">Source File</th>
-									<th data-field="translateFileUrl" data-sortable="true">Translate File</th>
-                                    <th data-field="creation" data-formatter="_formatte_locale_id" data-sortable="true">Creation Date</th>
-                                    <th data-field="assinged" data-formatter="_formatte_locale_id" data-sortable="true">Assinged Date</th>
-                                    <th data-field="checkin" data-formatter="_formatte_locale_id" data-sortable="true">Checkin Date</th>
-                                    <th data-field="pushback" data-formatter="_formatte_locale_id" data-sortable="true">Pushback Date</th>
+                                    <th data-field="supplierName" data-sortable="false" data-formatter="_formatte_supplier_name">Supplier</th>
+                                    <th data-field="sourceFileUrl" data-sortable="true">Source File</th>
+                                    <th data-field="translateFileUrl" data-sortable="true">Translate File</th>
+                                    <th data-field="creation" data-formatter="_formatte_locale_date" data-sortable="true">Creation Date</th>
+                                    <th data-field="assinged" data-formatter="_formatte_locale_date" data-sortable="true">Assinged Date</th>
+                                    <th data-field="checkin" data-formatter="_formatte_locale_date" data-sortable="true">Checkin Date</th>
+                                    <th data-field="pushback" data-formatter="_formatte_locale_date" data-sortable="true">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -116,6 +117,10 @@
                     <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
                 </div>
                 <div class="modal-body"></div>
+                <div class="modal-footer modal-footer-rejet-confirm" style="display:none;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-task-rejet-confirm" data-dismiss="modal">Confirm</button>
+                </div>
                 <div class="modal-footer modal-footer-commit-confirm" style="display:none;">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger btn-task-commit-confirm" data-dismiss="modal">Confirm</button>
@@ -148,7 +153,7 @@
 		    return '<input name="_project_id" type="radio" value="' + value + '" />';
 		}
 
-		function _formatte_locale_id(value, row, index) {
+		function _formatte_locale_date(value, row, index) {
 		    if (value > 0) {
 		        var d = new Date(value);
 		        return d.toLocaleString();
@@ -156,14 +161,19 @@
 		     return "-";
 		}
 
+		function _formatte_supplier_name(value, row, index) {
+		    return '<div style="min-width: 150px;">' + value + '</div>';
+		}
+
         $(".bs-example-modal-sm").on('hide.bs.modal', function (e) {
+            $(".bs-example-modal-sm").find(".modal-footer-rejet-confirm").css("display", "none");
             $(".bs-example-modal-sm").find(".modal-footer-commit-confirm").css("display", "none");
             $(".bs-example-modal-sm").find(".modal-footer-checkin-confirm").css("display", "none");
 
             $(".modal-backdrop.fade.in").remove();
         })
 
-		$(".btn.btn-primary.btn-commit").click(function() {
+		$(".btn.btn-success.btn-commit").click(function() {
             var id = $("input[name='_project_id']:checked").val();
 		    if (id != undefined) {
                 // 读取Project选中的用户信息
@@ -185,6 +195,44 @@
                 $.post("/console/project_management/commit", data, function(r, status) {
                     if (r.status == "SUCCEED") {
                         $(".bs-example-modal-sm").find(".modal-body").html("Commit succeed.");
+                        $(".bs-example-modal-sm").modal("show");
+
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+                    } else {
+                        if (r.message.WARNING) {
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
+                        }
+                    }
+                });
+            } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn.btn-default.btn-rejet").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                // 读取Project选中的用户信息
+                $.get("/console/project_management/get/" + id, null, function(r, status) {
+                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure the \"Rejet\" " + r.name + " project?");
+		            $(".bs-example-modal-sm").find(".modal-footer-rejet-confirm").css("display", "");
+                    $(".bs-example-modal-sm").modal("show");
+                });
+		    } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn-task-rejet-confirm").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                var data = {"id": id};
+                $.post("/console/project_management/rejet", data, function(r, status) {
+                    if (r.status == "SUCCEED") {
+                        $(".bs-example-modal-sm").find(".modal-body").html("Rejet succeed.");
                         $(".bs-example-modal-sm").modal("show");
 
                         $(".panel.panel-default").find("button[name='refresh']").click();

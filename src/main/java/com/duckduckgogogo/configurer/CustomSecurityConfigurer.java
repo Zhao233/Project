@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 @Configuration
 @EnableWebSecurity
 public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private UserDetailsService userDetailsService;
 
