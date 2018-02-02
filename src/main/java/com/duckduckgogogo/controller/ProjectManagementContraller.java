@@ -7,6 +7,10 @@ import com.duckduckgogogo.services.ProjectService;
 import com.duckduckgogogo.services.ProjectSupplierRelationService;
 import com.duckduckgogogo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,27 +30,43 @@ public class ProjectManagementContraller {
 
     @RequestMapping("/search")
     @ResponseBody
-    public List<Project> search() {
-        List<Project> projects = projectService.findAll();
-        for (Project task : projects) {
-            Set<User> supper = new HashSet<>();
+    public Map<String, Object> search(@RequestParam(value = "search", defaultValue = "") String search,
+                                @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        Map<String, Object> p = new HashMap<>();
 
-            Set<User> suppliers = task.getSuppliers();
-            for (User supplier : suppliers) {
-                ProjectSupplierRelation.Embeddabled embeddabled = new  ProjectSupplierRelation.Embeddabled();
-                embeddabled.setProject_id(task.getId());
-                embeddabled.setUser_id(supplier.getId());
-                ProjectSupplierRelation psr = projectSupplierRelationService.findById(embeddabled);
-                if (psr != null) {
-                    if (psr.getState() == null || psr.getState() != 0) {
-                        supper.add(supplier);
+        Pageable pageable = new PageRequest(offset, limit, new Sort(Sort.Direction.DESC, "id"));
+        Page<Project> page;
+        if ("".equals(search.trim())) {
+            page = projectService.findAll(pageable);
+        } else {
+            page = projectService.findAll(search.trim(), pageable);
+        }
+        if (page != null) {
+            List<Project> projects = page.getContent();
+            for (Project task : projects) {
+                Set<User> supper = new HashSet<>();
+
+                Set<User> suppliers = task.getSuppliers();
+                for (User supplier : suppliers) {
+                    ProjectSupplierRelation.Embeddabled embeddabled = new  ProjectSupplierRelation.Embeddabled();
+                    embeddabled.setProject_id(task.getId());
+                    embeddabled.setUser_id(supplier.getId());
+                    ProjectSupplierRelation psr = projectSupplierRelationService.findById(embeddabled);
+                    if (psr != null) {
+                        if (psr.getState() == null || psr.getState() != 0) {
+                            supper.add(supplier);
+                        }
                     }
                 }
+                task.setSuppliers(supper);
             }
-            task.setSuppliers(supper);
         }
 
-        return projects;
+        p.put("total", page != null ? page.getTotalElements() : 0);
+        p.put("rows", page != null ? page.getContent() : "");
+
+        return p;
     }
 
     @RequestMapping("/supplier_list")

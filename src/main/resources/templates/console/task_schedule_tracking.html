@@ -65,33 +65,20 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table data-toggle="table"
-                               data-url="/console/project_management/search"
-							   data-method="get"
-							   data-striped="true"
-							   data-show-refresh="true"
-							   data-show-toggle="false"
-							   data-show-columns="true"
-							   data-search="true"
-							   data-pagination="true"
-							   data-sidePagination="client"
-							   data-sortable="true"
-							   data-cache="false"
-							   data-sort-name="name"
-							   data-idField="id">
+                        <table id="_table_project_search">
                             <thead>
                                 <tr>
                                     <th data-field="index" data-formatter="_index_formatter">#</th>
-                                    <th data-field="name"  data-sortable="true">Name</th>
-                                    <th data-field="worldId" data-sortable="true">World Id</th>
-                                    <th data-field="locale" data-sortable="true">Locale</th>
-                                    <th data-field="state" data-sortable="true">State</th>
-                                    <th data-field="projectManagerName" data-sortable="true">Project Manager</th>
-									<th data-field="supplierName" data-sortable="false" data-formatter="_formatte_supplier_name">Supplier</th>
-									<th data-field="creation" data-formatter="_formatte_locale_date" data-sortable="true">Creation Date</th>
-									<th data-field="assinged" data-formatter="_formatte_locale_date" data-sortable="true">Assinged Date</th>
-									<th data-field="checkin" data-formatter="_formatte_locale_date" data-sortable="true">Checkin Date</th>
-									<th data-field="pushback" data-formatter="_formatte_locale_date" data-sortable="true">Pushback Date</th>
+                                    <th data-field="name">Name</th>
+                                    <th data-field="worldId">World Id</th>
+                                    <th data-field="locale">Locale</th>
+                                    <th data-field="state">State</th>
+                                    <th data-field="projectManagerName">Project Manager</th>
+									<th data-field="supplierName" data-formatter="_formatte_supplier_name">Supplier</th>
+									<th data-field="creation" data-formatter="_formatte_locale_date">Creation Date</th>
+									<th data-field="assinged" data-formatter="_formatte_locale_date">Assinged Date</th>
+									<th data-field="checkin" data-formatter="_formatte_locale_date">Checkin Date</th>
+									<th data-field="pushback" data-formatter="_formatte_locale_date">Pushback Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -132,6 +119,38 @@
 		function _formatte_supplier_name(value, row, index) {
 		    return '<div style="min-width: 150px;">' + value + '</div>';
 		}
+
+		$(document).ready(function() {
+            $('#_table_project_search').bootstrapTable({
+                method: 'get',
+                url: "/console/project_management/search",
+                striped: true,
+                dataType: "json",
+                pagination: true,
+                queryParamsType: "limit",
+                singleSelect: true,
+                contentType: "application/x-www-form-urlencoded",
+                pageSize: 10,
+                pageNumber:1,
+                search: true,
+                showColumns: true,
+                showRefresh: true,
+                sidePagination: "server", //服务端请求
+                queryParams: function(params) {
+                    return {
+                        limit: params.limit,
+                        offset: params.offset / params.limit,
+                        search: $(".search").find("input").val()
+                    };
+                },
+                responseHandler: function(res) {
+                    return {
+                        "rows": res.rows,
+                        "total": res.total
+                    };
+                }
+            });
+        });
 	</script>	
 </body>
 </html>

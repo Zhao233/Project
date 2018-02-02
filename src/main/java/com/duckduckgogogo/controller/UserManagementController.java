@@ -36,11 +36,11 @@ public class UserManagementController {
         if ("".equals(search.trim())) {
             page = userService.findAll(pageable);
         } else {
-            page = userService.findAll(search, pageable);
+            page = userService.findAll(search.trim(), pageable);
         }
 
         p.put("total", page != null ? page.getTotalElements() : 0);
-        p.put("rows", page.getContent());
+        p.put("rows", page != null ? page.getContent() : "");
 
         return p;
     }
