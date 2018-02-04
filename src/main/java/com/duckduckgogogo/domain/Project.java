@@ -1,5 +1,7 @@
 package com.duckduckgogogo.domain;
 
+import org.springframework.context.annotation.Lazy;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -23,16 +25,19 @@ public class Project {
      */
     @Column(name = "NAME", length = 255)
     private String name;
+
     /**
      * World Server中Project的id，数据来自World Server接口
      */
     @Column(name = "WORLD_ID", length = 100)
     private String worldId;
+
     /**
      * 要翻译的语言，数据来自World Server接口
      */
     @Column(name = "LOCALE", length = 50)
     private String locale;
+
     /**
      * 项目创建时间
      */
@@ -43,51 +48,60 @@ public class Project {
      */
     @Column(name = "ASSINGED_DATE")
     private Date assinged;
+
     /**
      * 项目提交时间
      */
     @Column(name = "CHECKIN_DATE")
     private Date checkin;
+
     /**
      * 项目返回World Server时间
      */
     @Column(name = "PUSHBACK_DATE")
     private Date pushback;
+
     /**
      * 项目经理（谁分配）
      */
     // private long assignedBy;
     @OneToOne
-    @JoinColumn(name="ASSIGNED_BY")
+    @JoinColumn(name = "ASSIGNED_BY")
     private User projectManager;
+
     /**
      * 供应商（分配给谁）
      */
     // private long assignedTo;
     @OneToOne
-    @JoinColumn(name="ASSIGNED_TO")
+    @JoinColumn(name = "ASSIGNED_TO")
     private User supplier;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "PROJECT_ASSIGNED_TO_SUPPLIER",
             joinColumns = {@JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
+    @Lazy
     private Set<User> suppliers;
+
     /**
      * 项目状态（1,Not Assign;2,Assigned;3,In Progress;4,Pending;5,Completed）
      */
     @Column(name = "STATE", length = 30)
     private String state;
+
     /**
      * 源文件路径
      */
     @Column(name = "SOURCE_FILE_URL", length = 500)
     private String sourceFileUrl;
+
     /**
      * 源文件名
      */
-    @Column(name = "SOURCE_NAME", length = 255)
+    @Column(name = "SOURCE_FILE_NAME", length = 255)
     private String sourceName;
+
     /**
      * 翻译后文件路径
      */
@@ -97,7 +111,7 @@ public class Project {
     /**
      * 翻译后文件名
      */
-    @Column(name = "TRANSLATE_NAME", length = 255)
+    @Column(name = "TRANSLATE_FILE_NAME", length = 255)
     private String translateName;
 
     /**

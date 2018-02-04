@@ -12,7 +12,24 @@
     <!--[if lt IE 9]>
     <script src="/javascript/html5shiv.js"></script>
     <script src="/javascript/respond.min.js"></script>
-	<![endif]-->
+    <![endif]-->
+    <style>
+        .mask {       
+            position: absolute; 
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0; 
+            filter: alpha(opacity=70);
+            background-color: rgba(49, 46, 51, 1);     
+            z-index: 99999;
+            left: 0px;     
+            opacity: 0.6;
+            -moz-opacity: 0.6;
+            text-align: center;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -92,8 +109,8 @@
                                     <th data-field="state">State</th>
                                     <th data-field="projectManagerName">Project Manager</th>
                                     <th data-field="supplierName" data-formatter="_formatte_supplier_name">Supplier</th>
-                                    <th data-field="sourceFileUrl">Source File</th>
-                                    <th data-field="translateFileUrl">Translate File</th>
+                                    <th data-field="sourceName" data-formatter="_formatte_source">Source File</th>
+                                    <th data-field="translateName" data-formatter="_formatte_translate">Translate File</th>
                                     <th data-field="creation" data-formatter="_formatte_locale_date">Creation Date</th>
                                     <th data-field="assinged" data-formatter="_formatte_locale_date">Assinged Date</th>
                                     <th data-field="checkin" data-formatter="_formatte_locale_date">Checkin Date</th>
@@ -107,6 +124,49 @@
         </div><!--/.row-->
 	</div>	<!--/.main-->
 
+	<div id="dialog-uploadfiles" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Task management  | Check in "<span id="dialog-uploadfiles-title"></span>"</h4>
+				</div>
+				<div class="modal-body">
+					<form role="form"
+                          class="form-horizontal form-uploadfiles"
+                          enctype="multipart/form-data"
+                          method="POST">
+                        <input type="text" style="display:none;" id="id" name="id" />
+                        <div class="form-group">
+                            <label for="translateFile" class="col-sm-3 control-label">Translate File</label>
+                            <div class="col-sm-8">
+                                <input style="display:none;" 
+                                    type="file" 
+                                    id="translateFile" 
+                                    name="translateFile" 
+                                    onchange="javascript:$('#translateFileView').val(this.value.substr(this.value.lastIndexOf('\\') + 1));"
+                                    required="required" />
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="translateFileView" readonly="readonly" />
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-success" type="button" onclick="javascript:$('#translateFile').click();">Choose</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                                <button type="button" class="btn btn-default btn-check-in-close" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary btn-check-in-confirm">Confirm</button>
+                            </div>
+                        </div>
+
+					</form>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">
@@ -132,6 +192,10 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <div class="mask">
+        <img src="/images/1831f5d788adb741537f7468c32acea0.gif" />
+    </div>
+
    	<script src="/javascript/jquery-1.11.1.min.js"></script>
 	<script src="/javascript/bootstrap.min.js"></script>
     <script src="/javascript/bootstrap-table.min.js"></script>
@@ -148,6 +212,15 @@
 			else $('#sidebar-collapse').collapse('hide');
 		});
 
+        //显示遮罩层    
+        function showMask(){
+            $(".mask").show();     
+        }  
+        //隐藏遮罩层  
+        function hideMask(){            
+            $(".mask").hide();     
+        } 
+
 		function _formatte_project_id(value, row, index) {
 		    return '<input name="_project_id" type="radio" value="' + value + '" />';
 		}
@@ -163,6 +236,18 @@
 		function _formatte_supplier_name(value, row, index) {
 		    return '<div style="min-width: 150px;">' + value + '</div>';
 		}
+
+        function _formatte_translate(value, row, index) {
+            if (value != undefined) {
+                return '<a href="/console/project_management/dowload/translate/' + row.id + '" target="_black">' + value + '</a>';
+            }
+        }
+
+        function _formatte_source(value, row, index) {
+            if (value != undefined) {
+                return '<a href="/console/project_management/dowload/source/' + row.id + '" target="_black">' + value + '</a>';
+            }
+        }
 
         $(".bs-example-modal-sm").on('hide.bs.modal', function (e) {
             $(".bs-example-modal-sm").find(".modal-footer-rejet-confirm").css("display", "none");
@@ -244,6 +329,73 @@
                 });
             } else {
 		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn-check-in").click(function() {
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                var target = "/console/project_management/get/" + id;
+                $.get(target, null, function(r, status) {
+                    $(".form-horizontal.form-uploadfiles")[0].reset();
+                    $("#dialog-uploadfiles").find("input[id='id']").val(r.id);
+                    $("#dialog-uploadfiles-title").html(r.name);
+                    $("#dialog-uploadfiles").modal("show");
+                });
+            } else {
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
+		    }
+        });
+
+        $(".btn-check-in-confirm").click(function() {
+            var message = undefined;
+            var id = $("input[name='_project_id']:checked").val();
+		    if (id != undefined) {
+                var file = $("#translateFile")[0].files[0];
+                if (file != undefined) {
+                    var form = new FormData();
+                    form.append("id", id);
+                    form.append("file", $("#translateFile")[0].files[0]);
+                    $.ajax({ 
+                        url: "/console/project_management/checkin", 
+                        type: "post", 
+                        data: form, 
+                        processData: false, 
+                        contentType: false,
+                        beforeSend: function(){
+                            showMask();
+                        },
+                        success: function(r) {
+                            hideMask();
+                            if (r.status == "SUCCEED") {
+                                $(".bs-example-modal-sm").find(".modal-body").html("Check in succeed.");
+                                $(".bs-example-modal-sm").modal("show");
+                                $("#dialog-uploadfiles").modal("hide");
+        
+                                $(".panel.panel-default").find("button[name='refresh']").click();
+                            } else {
+                                if (r.message.WARNING) {
+                                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                                    $(".bs-example-modal-sm").modal("show");
+                                }
+                            }
+                        }, 
+                        error: function(r) {
+                            hideMask();
+                            $(".bs-example-modal-sm").find(".modal-body").html("Oh snap! System handling failure please log in again.");
+                            $(".bs-example-modal-sm").modal("show");
+                        } 
+                    });
+                } else {
+                    message = "Please choose the file.";
+                }
+            } else {
+                message = "You did not select the task.";
+            }
+            if (message != undefined) {
+		        $(".bs-example-modal-sm").find(".modal-body").html(message);
 		        $(".bs-example-modal-sm").modal("show");
 		    }
         });

@@ -80,8 +80,8 @@
                                     <th data-field="state">State</th>
                                     <th data-field="projectManagerName">Project Manager</th>
                                     <th data-field="supplierName" data-formatter="_formatte_supplier_name">Supplier</th>
-									<th data-field="sourceFileUrl">Source File</th>
-									<th data-field="translateFileUrl">Translate File</th>
+                                    <th data-field="sourceName" data-formatter="_formatte_source">Source File</th>
+                                    <th data-field="translateName" data-formatter="_formatte_translate">Translate File</th>
                                     <th data-field="creation" data-formatter="_formatte_locale_date">Creation Date</th>
                                     <th data-field="assinged" data-formatter="_formatte_locale_date">Assinged Date</th>
                                     <th data-field="checkin" data-formatter="_formatte_locale_date">Checkin Date</th>
@@ -233,6 +233,18 @@
 		function _formatte_supplier_name(value, row, index) {
 		    return '<div style="min-width: 150px;">' + value + '</div>';
 		}
+        
+        function _formatte_translate(value, row, index) {
+            if (value != undefined) {
+                return '<a href="/console/project_management/dowload/translate/' + row.id + '" target="_black">' + value + '</a>';
+            }
+        }
+
+        function _formatte_source(value, row, index) {
+            if (value != undefined) {
+                return '<a href="/console/project_management/dowload/source/' + row.id + '" target="_black">' + value + '</a>';
+            }
+        }
 
 		function _reset(from) {
             from[0].reset();
