@@ -78,20 +78,21 @@ public class UserManagementController {
                 user.setPassword(PasswordEncodeAssistant.encode(user.getPassword().toCharArray()));
             }
             if (user.getUsername() != null && !user.getUsername().isEmpty()) {
-                String regEx = "[A-Za-z][A-Za-z0-9_-]{3,31}";
+                String regEx = "[A-Za-z0-9_-][A-Za-z0-9_-]{3,31}";
                 boolean ok = Pattern.compile(regEx).matcher(user.getUsername()).matches();
                 if (ok) {
                     mark = userService.findByUsername(user.getUsername());
                     if (mark != null && user.getId() != mark.getId()) message.put("username", "Oh snap! Already existed.");
                 } else {
-                    message.put("username", "Oh snap! 4-30 letters.");
+                    message.put("username", "Oh snap! 4-30 letters,and must be A-Z,a-z,0-9 or _ or -");
                 }
             } else {
                 message.put("username", "Oh snap! Can't be empty.");
             }
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
                 String regEx = "(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+){1,200}";
-                boolean ok = Pattern.compile(regEx).matcher(user.getEmail()).matches();
+//                boolean ok = Pattern.compile(regEx).matcher(user.getEmail()).matches();
+                boolean ok = true;
                 if (ok) {
                     mark = userService.findByEmail(user.getEmail());
                     if (mark != null && user.getId() != mark.getId()) message.put("email", "Oh snap! Already existed.");
@@ -102,19 +103,19 @@ public class UserManagementController {
                 message.put("email", "Oh snap! Can't be empty.");
             }
             if (user.getFirstName() != null && !user.getFirstName().isEmpty()) {
-                String regEx = "[A-Za-z][A-Za-z0-9_-]{0,31}";
+                String regEx = "[A-Za-z0-9_-][A-Za-z0-9_-]{0,31}";
                 boolean ok = Pattern.compile(regEx).matcher(user.getFirstName()).matches();
                 if (!ok) {
-                    message.put("firstName", "Oh snap! 1-30 letters.");
+                    message.put("firstName", "Oh snap! 1-30 letters,and must be A-Z,a-z,0-9 or _ or -");
                 }
             } else {
                 message.put("firstName", "Oh snap! Can't be empty.");
             }
             if (user.getLastName() != null && !user.getLastName().isEmpty()) {
-                String regEx = "[A-Za-z][A-Za-z0-9_-]{0,31}";
+                String regEx = "[A-Za-z0-9_-][A-Za-z0-9_-]{0,31}";
                 boolean ok = Pattern.compile(regEx).matcher(user.getLastName()).matches();
                 if (!ok) {
-                    message.put("lastName", "Oh snap! 1-30 letters.");
+                    message.put("lastName", "Oh snap! 1-30 letters,and must be A-Z,a-z,0-9 or _ or -");
                 }
             } else {
                 message.put("lastName", "Oh snap! Can't be empty.");

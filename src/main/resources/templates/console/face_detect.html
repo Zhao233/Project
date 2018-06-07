@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>DETECT</title>
+
+	<link href="/style/bootstrap.min.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
+	<link href="/style/layout.css" rel="stylesheet" />
+
+    <!--[if lt IE 9]>
+    <script src="/javascript/html5shiv.js"></script>
+    <script src="/javascript/respond.min.js"></script>
+	<![endif]-->
+	<style>
+        .mask {       
+            position: absolute; 
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0; 
+            filter: alpha(opacity=70);
+            background-color: rgba(49, 46, 51, 1);     
+            z-index: 99999;
+            left: 0px;     
+            opacity: 0.6;
+            -moz-opacity: 0.6;
+            text-align: center;
+            display: none;
+        }
+        .W180{width:180px;}
+        .W150{width:150px;}
+        .W100{width:100px;}
+        .W90{width:90px;}
+        .W80{width:80px;}
+        .W70{width:70px;}
+        .W60{width:60px;}
+        .W50{width:50px;}
+        .W30{width:30px;}
+        .W20{width:20px;}
+        .W10{width:10px;}
+        .W0{width:0px;}
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/console/face_upload"><span>detect</span></a>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+
+
+    <div>
+
+
+        <div class="col" style="border:none;">
+            <div class="col-lg-8" style="border:none;">
+                <div class="panel-body" style="border:none;">
+                        <table id="_table_photo_search"
+                               data-toggle="table"
+                               data-url="/console/project_management/search_photolist"
+							   data-method="get"
+							   data-striped="true"
+							   data-show-refresh="true"
+							   data-show-toggle="false"
+							   data-show-columns="true"
+							   data-search="true"
+							   data-pagination="true"
+							   data-sidePagination="client"
+							   data-cache="false"
+							   data-resizable="true"
+							   data-sort-name="tracedate"
+							   data-sort-order="desc"
+							   data-idField="id" style="border:none;">
+                            <thead style="border:none;">
+                                <tr style="border:none;">
+                                    <th data-field="userid" data-sortable="true" class="W10" style="border:none;">ID</th>
+                                    <th data-field="userName" data-sortable="true" class="W20" style="border:none;">Name</th>
+                                    <th data-field="imgurl" data-formatter="_formatte_locale_image" data-sortable="true" class="W70" style="border:none;">Image</th>
+                                    <th data-field="visitorImgurl" data-formatter="_formatte_locale_image" data-sortable="true" class="W100" style="border:none;">Image</th>
+                                    <th data-field="tracedate" data-formatter="_formatte_locale_date" data-sortable="true" class="W60" style="border:none;">Trace Date</th>                                   
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+            </div>
+        </div><!--/.row-->
+        
+        
+        <div class="col">
+            <div class="col-lg-4">
+                <div class="panel-body">
+                        <table id="_table_photo_search_times"
+                               data-toggle="table"
+                               data-url="/console/project_management/search_times"
+							   data-method="get"
+							   data-striped="true"
+							   data-show-refresh="true"
+							   data-show-toggle="false"
+							   data-show-columns="true"
+							   data-search="true"
+							   data-pagination="true"
+							   data-sidePagination="client"
+							   data-cache="false"
+							   data-resizable="true"
+							   data-sort-name="tracedate"
+							   data-sort-order="desc"
+							   data-idField="id">
+                            <thead>
+                                <tr>     
+                                    <th data-field="imgurl" data-formatter="_formatte_locale_image2" data-sortable="true" class="W100">Image</th>
+                                    <th data-field="showtimes" data-sortable="true" class="W80">Times</th>
+                                    <th data-field="strangerid" data-sortable="true" class="W0"></th>                                    
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+            </div>
+        </div><!--/.row-->
+        
+        
+	</div>	<!--/.main-->
+	
+	
+	
+
+	
+	
+	<div id="dialog-detect" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="width:1280px;background-color:rgba(153,0,0,0.382);top:180px;">
+			<div class="modal-content" style="background-color:rgba(153,0,0,0.382);opacity:0.99;">
+				<div class="modal-body">
+					<form role="form" class="form-horizontal form-detect" method="POST">
+					    <div class="form-group">
+							<div class="col-sm-2" style="text-align:center;">
+							    <br/><br/>
+							    <img style="width:100;height:100px;" src="/images/icon.png" />
+							    <h2 class="modal-title" style="color:#ffffff">Detection</h2>
+							</div>
+							<div class="col-sm-3 showphoto1" style="text-align:center;">
+							    
+							</div>
+							
+							<div class="col-sm-1" style="text-align:center;">
+							    <!--
+							    <br/><br/><br/>
+							    <h2 class="modal-title" style="color:#ffffff">Matching Ratio</h2>
+							    <h1 class="modal-title" style="color:#ffffff"><span id="showinfo1"></span></h1>
+							    -->
+							</div>
+							
+							<div class="col-sm-3 showphoto2" style="text-align:center;">
+							    
+							</div>
+							<div class="col-sm-3" style="text-align:center;">
+							    <br/><br/><br/>
+							    <h1 class="modal-title" style="color:#ffffff"><span id="showinfo2"></span></h1>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	
+
+    <div class="mask">
+        <img src="/images/1831f5d788adb741537f7468c32acea0.gif" />
+    </div>
+    <!--
+    <div id="voice">
+    </div>
+    -->
+   	<script src="/javascript/jquery-1.11.1.min.js"></script>
+	<script src="/javascript/bootstrap.min.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/colResizable-1.6.min.js"></script>
+    <script src="/javascript/bootstrap-table-resizable.min.js"></script>
+	<script>
+	function _formatte_locale_date(value, row, index) {
+	    if (value > 0) {
+	        var d = new Date(value);
+	        return d.toLocaleString();
+	    }
+	     return "-";
+	}
+	
+	function _formatte_locale_image(value, row, index) {
+		var s = '<a class = "view"  href="javascript:void(0)"><img style="width:400;height:120px;"  src="'+value+'" /></a>';
+        return s;
+	}
+	
+	function _formatte_locale_image2(value, row, index) {
+		var s = '<a class = "view"  href="/console/charts?' + row.strangerid + '"><img style="width:400;height:120px;"  src="'+value+'" /></a>';
+        return s;
+	}
+	
+	var totalnumber;
+	
+	var countnumber = 25;
+	
+	var querynumber;
+	
+	var audio = new Audio();
+	audio.src = "/voices/test.mp3";
+	
+	var fn = function(){
+		var data;
+		
+		countnumber = countnumber - 1;
+		//console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc:"+countnumber);
+		
+		if(countnumber == 0){
+			$("#dialog-detect").modal("hide");
+		}
+		
+		$.post("/console/project_management/search_photonumber", data, function(r, status) {
+			//alert(totalnumber);
+			if(totalnumber != r.status)
+			{
+				totalnumber = r.status;
+				
+				
+					$.post("/console/project_management/search_latest", data, function(r, status) {
+	                    var form = $(".form-horizontal.form-detect");
+	                    //form.find(".showphoto1").html('<a class = "view"  href="javascript:void(0)"><img style="width:100;height:200px;" src="'+ r.imgurl +'" /></a>');
+	                    
+	                    //$("#showinfo1").html(r.score);
+	                    
+	                    if(r.userName != "Visitor")
+	                    {
+	                    	form.find(".showphoto1").html('<a class = "view"  href="javascript:void(0)"><img style="width:100;height:200px;" src="'+ r.imgurl +'" /></a>');
+		                    
+		                    $("#showinfo1").html(r.score);
+	                    	
+	                    	//form.find(".showphoto2").html('<a class = "view"  href="javascript:void(0)"><img style="width:100;height:200px;" src="http://192.168.4.75:80/verify/face/gets?imageId='+ r.imageid +'" /></a>');
+	                    	form.find(".showphoto2").html('<a class = "view"  href="javascript:void(0)"><img style="width:100;height:200px;" src="'+ r.visitorImgurl +'" /></a>');
+	                    	$("#showinfo2").html("欢迎您！<br/>"+r.userName);
+	                    	$("#dialog-detect").modal("show");
+	                    	audio.play();
+	                    	//playVoice("/voices/test.mp3");
+	                    	//window.open("/voices/test.mp3", "_self");
+	                    	countnumber = querynumber;
+	                    }else{
+	                    	//form.find(".showphoto1").html('<a class = "view"  href="javascript:void(0)"><img style="width:100;height:200px;" src="'+ r.imgurl +'" /></a>');
+		                    
+		                    //$("#showinfo1").html(r.score);
+	                    	
+	                    	//form.find(".showphoto2").html('<a class = "view"  href="javascript:void(0)"><img style="width:100;height:200px;" src="'+ r.visitorImgurl +'" /></a>');
+	                    	//$("#showinfo2").html(r.userName+" "+r.userid);
+	                    }
+	                    	
+		                    //$("#dialog-detect").modal("show");
+		                    //countnumber = 25;
+		                    /*
+		                    setTimeout(function(){
+		                    	$("#dialog-detect").modal("hide");
+		                    },5000);
+	    				    */
+	                    
+	                    
+	             
+	                });
+				
+				
+				$('#_table_photo_search').bootstrapTable('refresh');
+				$('#_table_photo_search_times').bootstrapTable('refresh');
+				
+			}
+			
+	    });
+		
+        setTimeout(fn, 200);
+    }
+     
+	/*
+	function playVoice(file) {
+        $('#voice').html('<audio controls="controls" id="audio_player" style="display:none;"> <source src="' + file + '" ></source> </audio><embed id="MPlayer_Alert" src="' + file + '" loop="false" width="0px" height="0px" ></embed>');
+    }
+	*/
+	
+    $(document).ready(function() {
+    	var data;
+    	$.post("/console/project_management/search_photonumber", data, function(r, status) {
+    		totalnumber = r.status;
+    		//totalnumber = 0;
+    		//alert(totalnumber);
+        });
+    	
+    	$.get("/console/faceconfig_management/get/1", null, function(r, status) {
+    		//console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb:"+r.time3*5);
+    		querynumber = r.time3*5;
+    		countnumber = querynumber;
+        });
+    	
+    	//console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa:"+countnumber);
+    	
+    	//alert(totalnumber);
+    	
+        fn();
+    });
+	
+	</script>	
+</body>
+</html>

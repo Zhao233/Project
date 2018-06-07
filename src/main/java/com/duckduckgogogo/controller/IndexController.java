@@ -32,6 +32,18 @@ public class IndexController {
             request.getSession().setAttribute("user", user);
         }
 
-        return "redirect:/console";
+        if(user.getRole().equals("PM"))
+        {
+        	return "redirect:/console/task_allocation";
+        }else if(user.getRole().equals("S")){
+        	return "redirect:/console/task_management";
+        }else if(user.getRole().equals("C")){
+        	return "redirect:/console/task_schedule_tracking";
+        }else if(user.getRole().equals("A")){
+        	return "redirect:/console/user_management";
+        }else {
+        	return "redirect:/console";
+        }
+        	
     }
 }

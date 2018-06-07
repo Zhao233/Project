@@ -13,10 +13,12 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(Exception.class)
     public Map<String, Object> handleException(Exception e) {
+        if (e != null) e.printStackTrace();
+
         Map<String, Object> r = new HashMap<>();
 
         Map<String, Object> message = new HashMap<>();
-        message.put("WARNING", "Oh snap! System handling failure please log in again.");
+        message.put("WARNING", "Oh snap! System handling failure.");
 
         r.put("status", "FAILED");
         r.put("message", message);

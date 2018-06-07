@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>GBMS</title>
+	<title>Task</title>
 
 	<link href="/style/bootstrap.min.css" rel="stylesheet" />
     <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
@@ -25,7 +25,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/console"><span>GBMS</span></a>
+				<a class="navbar-brand" href="/console"><span>Task</span></a>
 			</div>
 		</div><!-- /.container-fluid -->
 	</nav>
@@ -33,32 +33,29 @@
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<form role="search">
 			<div class="form-group" style="font-weight: 600;color: #30a5ff;text-transform: uppercase;text-align: right;">
-				Welcome<br/><span th:text="${session.user.firstName}">HELLO</span>&nbsp;<span th:text="${session.user.lastName}">WORLD</span>
+				Welcome<br/><span>HELLO</span>&nbsp;<span>WORLD</span>
 			</div>
 		</form>
 		<ul class="nav menu">
-			<li class="active" th:if="${session.user.role} == 'A'"><a href="/console/user_management"><span class="glyphicon glyphicon-user"></span> User management</a></li>
-            <li th:if="${session.user.role} == 'A'"><a href="/console/auto_task_assignment"><span class="glyphicon glyphicon-random"></span> Auto Task Assignment</a></li>
-			<li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
-			<li th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
-			<li th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
-			<li role="presentation" class="divider"></li>
-            <li><a href="/console/profile"><span class="glyphicon glyphicon-cog"></span> Profile</a></li>
-            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+			<li><a href="/console/face_upload"><span class="glyphicon glyphicon-user"></span> Face Upload</a></li>
+            <li><a href="/console/face_register"><span class="glyphicon glyphicon-list-alt"></span> User Management</a></li>
+			<li class="active"><a href="/console/face_task"><span class="glyphicon glyphicon-folder-open"></span> Task Management</a></li>
+			<li><a href="/console/face_config"><span class="glyphicon glyphicon-ok"></span> Config Info</a></li>
+			<li><a href="/console/face_detect"><span class="glyphicon glyphicon-random"></span> Face Detect</a></li>
 		</ul>
 	</div><!--/.sidebar-->
 
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
-				<li class="active">User Management</li>
+				<li><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
+				<li class="active">Task Management</li>
 			</ol>
 		</div><!--/.row-->
 		
 		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">User Management</h1>
+			<div class="col-lg-12" style="display:none;">
+				<h1 class="page-header">Task Management</h1>
 			</div>
 		</div><!--/.row-->
 
@@ -66,20 +63,21 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New User</button>
-                        <button class="btn btn-default open-update-use-dialog" data-toggle="modal">Update User</button>
+                        <button class="btn btn-primary open-add-new-user-dialog" data-toggle="modal">Add New Task</button>
+                        <button class="btn btn-default open-update-use-dialog" data-toggle="modal">Update Task</button>
+                        <button class="btn btn-primary delete-face-dialog" data-toggle="modal">Delete Task</button>
                     </div>
                     <div class="panel-body">
-                        <table id="_table_user_search">
+                        <table id="_table_task_search">
                             <thead>
                                 <tr>
-                                    <th data-field="id" data-formatter="_formatte_user_id" data-align="center"></th>
-                                    <th data-field="username">Username</th>
-                                    <th data-field="firstName">First Name</th>
-                                    <th data-field="lastName">Last Name</th>
-                                    <th data-field="email">Email</th>
-                                    <th data-field="role">Role</th>
-                                    <th data-field="enabled">Enabled</th>
+                                    <th data-field="id" data-formatter="_formatte_task_id" data-align="center"></th>
+                                    <th data-field="taskId">TaskID</th>
+                                    <th data-field="rtspUrl">Rtsp Url</th>
+                                    <th data-field="receiveUrl">Receive Url</th>
+                                    <th data-field="dbId">DBID</th>
+                                    <th data-field="score">Score</th>
+                                    <th data-field="updateDate" data-formatter="_formatte_locale_date">Update Date</th>
                                 </tr>
                             </thead>
                         </table>
@@ -94,82 +92,55 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">User Management  | <span id="dialog-user-management-update-title"></span></h4>
+                    <h4 class="modal-title">Task Management  | <span id="dialog-user-management-update-title"></span></h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" class="form-horizontal add-new-user" method="POST">
                         <input type="text" style="display:none;" id="id" name="id" />
                         <input type="text" style="display:none;" id="version" name="version" />
                         <div class="form-group">
-                            <label for="username" class="col-sm-4 control-label">Username</label>
+                            <label for="taskId" class="col-sm-4 control-label">TaskID</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="username" name="username" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
+                                <input type="text" class="form-control" id="taskId" name="taskId" data-toggle="tooltip" data-placement="top" maxlength="100" readonly="true" />
                             </div>
                             <div class="col-sm-1"></div>
                         </div>
                         <div class="form-group">
-                            <label for="firstName" class="col-sm-4 control-label">First Name</label>
+                            <label for="rtspUrl" class="col-sm-4 control-label">Rtsp Url</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="firstName" name="firstName" maxlength="30" />
+                                <input type="text" class="form-control" id="rtspUrl" name="rtspUrl" maxlength="200" />
                             </div>
                             <div class="col-sm-1"></div>
                         </div>
                         <div class="form-group">
-                            <label for="lastName" class="col-sm-4 control-label">Last Name</label>
+                            <label for="receiveUrl" class="col-sm-4 control-label">Receive Url</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="lastName" name="lastName" maxlength="30" />
+                                <input type="text" class="form-control" id="receiveUrl" name="receiveUrl" maxlength="200" />
                             </div>
                             <div class="col-sm-1"></div>
                         </div>
                         <div class="form-group">
-                            <label for="email" class="col-sm-4 control-label">Email</label>
+                            <label for="dbId" class="col-sm-4 control-label">DBID</label>
                             <div class="col-sm-7">
-                                <input type="email" class="form-control" id="email" name="email" data-toggle="tooltip" data-placement="top" maxlength="200" placeholder="e.g john@example.com" />
+                                <input type="text" class="form-control" id="dbId" name="dbId" data-toggle="tooltip" data-placement="top" maxlength="100" required="required" />
                             </div>
                             <div class="col-sm-1"></div>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="col-sm-4 control-label">Password</label>
+                            <label for="score" class="col-sm-4 control-label">Score</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="password" name="password" data-toggle="tooltip" maxlength="20" data-placement="bottom" required="required" />
+                                <input type="text" class="form-control" id="score" name="score" data-toggle="tooltip" maxlength="100" data-placement="bottom" required="required" />
                             </div>
                             <div class="col-sm-1"></div>
                         </div>
-                        <div class="form-group">
-                            <label for="confirmPassword" class="col-sm-4 control-label">Confirm Password</label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" required="required" />
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="role" class="col-sm-4 control-label">Role</label>
-                            <div class="col-sm-7">
-                                <select id="role" name="role" class="form-control" required="required">
-                                    <option value="S">S - Supplier</option>
-                                    <option value="A">A - Admin</option>
-                                    <option value="C">C - Customer</option>
-                                    <option value="PM">PM - Project Management</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="enabled" class="col-sm-4 control-label">Enabled</label>
-                            <div class="col-sm-7">
-                                <select id="enabled" name="enabled" class="form-control" required="required">
-                                    <option value="True">True</option>
-                                    <option value="False">False</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
+                        
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
                                 <button type="button" class="btn btn-default add-new-user-close" data-dismiss="modal">Cancel</button>
                                 <button type="button" class="btn btn-primary add-new-user">Save Changes</button>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
             </div><!-- /.modal-content -->
@@ -177,6 +148,22 @@
     </div><!-- /.modal -->
 
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer modal-footer-delete-confirm" style="display:none;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-task-delete-confirm" data-dismiss="modal">Confirm</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -204,7 +191,7 @@
 			else $('#sidebar-collapse').collapse('hide');
 		});
 
-		function _formatte_user_id(value, row, index) {
+		function _formatte_task_id(value, row, index) {
 		    return '<input name="id" type="radio" value="' + value + '" />';
 		}
 
@@ -226,7 +213,7 @@
 
         $(".btn.btn-primary.open-add-new-user-dialog").click(function() {
             _reset($(".form-horizontal.add-new-user"));
-            $("#dialog-user-management-update-title").html("Add new user");
+            $("#dialog-user-management-update-title").html("Add new task");
             $("#dialog-user-management-update").modal("show");
         });
 
@@ -235,21 +222,20 @@
 		    if (id != undefined) {
                 _reset($(".form-horizontal.add-new-user"));
                 // 读取用户选中的用户信息
-                $.get("/console/user_management/get/" + id, null, function(r, status) {
+                $.get("/console/facetask_management/get/" + id, null, function(r, status) {
                     $("#dialog-user-management-update").find("input[id='id']").val(r.id);
                     $("#dialog-user-management-update").find("input[id='version']").val(r.version);
-                    $("#dialog-user-management-update").find("input[id='username']").val(r.username);
-                    $("#dialog-user-management-update").find("input[id='firstName']").val(r.firstName);
-                    $("#dialog-user-management-update").find("input[id='lastName']").val(r.lastName);
-                    $("#dialog-user-management-update").find("input[id='email']").val(r.email);
-                    $("#dialog-user-management-update").find("select[id='role']").val(r.role);
-                    $("#dialog-user-management-update").find("select[id='enabled']").val(r.enabled ? "True" : "False");
+                    $("#dialog-user-management-update").find("input[id='taskId']").val(r.taskId);
+                    $("#dialog-user-management-update").find("input[id='rtspUrl']").val(r.rtspUrl);
+                    $("#dialog-user-management-update").find("input[id='receiveUrl']").val(r.receiveUrl);
+                    $("#dialog-user-management-update").find("input[id='dbId']").val(r.dbId);
+                    $("#dialog-user-management-update").find("input[id='score']").val(r.score);
 
-                    $("#dialog-user-management-update-title").html("Update user");
+                    $("#dialog-user-management-update-title").html("Update task");
                     $("#dialog-user-management-update").modal("show");
                 });
 		    } else {
-		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the user.");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
 		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
@@ -258,7 +244,7 @@
             _reset_input($(".form-horizontal.add-new-user").find("input"));
 
             var data = $(".form-horizontal.add-new-user").serializeArray();
-            $.post("/console/user_management/save", data, function(r, status) {
+            $.post("/console/facetask_management/save", data, function(r, status) {
                 if (r.status == "SUCCEED") {
                     $(".bs-example-modal-sm").find(".modal-body").html(
                         $("#dialog-user-management-update-title").html() + " succeeded."
@@ -268,21 +254,10 @@
                     $(".panel.panel-default").find("button[name='refresh']").click();
                     // location.reload();
                 } else {
-                    if (r.message.username) {
-                        _set($(".form-horizontal.add-new-user").find("input[id='username']"), r.message.username);
+                    if (r.message.rtspUrl) {
+                        _set($(".form-horizontal.add-new-user").find("input[id='rtspUrl']"), r.message.rtspUrl);
                     }
-                    if (r.message.email) {
-                        _set($(".form-horizontal.add-new-user").find("input[id='email']"), r.message.email);
-                    }
-                    if (r.message.password) {
-                        _set($(".form-horizontal.add-new-user").find("input[id='password']"), r.message.password);
-                    }
-                    if (r.message.firstName) {
-                        _set($(".form-horizontal.add-new-user").find("input[id='firstName']"), r.message.firstName);
-                    }
-                    if (r.message.lastName) {
-                        _set($(".form-horizontal.add-new-user").find("input[id='lastName']"), r.message.lastName);
-                    }
+                    
                     if (r.message.WARNING) {
                         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
                         $(".bs-example-modal-sm").modal("show");
@@ -291,10 +266,54 @@
             });
         });
 
+        $(".delete-face-dialog").click(function() {
+        	var id = $("input[type='radio']:checked").val();
+		    if (id != undefined) {
+                // 读取Project选中的用户信息
+                $.get("/console/facetask_management/get/" + id, null, function(r, status) {
+                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure to delete task " + r.taskId + "?");
+		            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "");
+                    $(".bs-example-modal-sm").modal("show");
+                });
+		    } else {
+		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
+		        $("#dialog-return").modal("show");
+		    }
+        });
+        
+        $(".btn-task-delete-confirm").click(function() {
+        	var id = $("input[type='radio']:checked").val();
+		    if (id != undefined) {
+                var data = {"id": id};
+                $.post("/console/facetask_management/delete", data, function(r, status) {
+                    if (r.status == "SUCCEED") {
+                        $("#dialog-return").find(".modal-body").html("Delete succeeded.");
+                        $("#dialog-return").modal("show");
+
+                        $(".panel.panel-default").find("button[name='refresh']").click();
+                    } else {
+                        if (r.message.WARNING) {
+                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
+                            $("#dialog-return").modal("show");
+                        }
+                    }
+                });
+            } else {
+		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
+		        $("#dialog-return").modal("show");
+		    }
+        });
+        
+        $(".bs-example-modal-sm").on('hide.bs.modal', function (e) {
+            $(".bs-example-modal-sm").find(".modal-footer-delete-confirm").css("display", "none");
+            
+            $(".modal-backdrop.fade.in").remove();
+        })
+        
         $(document).ready(function() {
-            $('#_table_user_search').bootstrapTable({
+            $('#_table_task_search').bootstrapTable({
                 method: 'get',
-                url: "/console/user_management/search",
+                url: "/console/facetask_management/search",
                 striped: true,
                 dataType: "json",
                 pagination: true,
@@ -322,6 +341,14 @@
                 }
             });
         });
+        
+        function _formatte_locale_date(value, row, index) {
+		    if (value > 0) {
+		        var d = new Date(value);
+		        return d.toLocaleString();
+		    }
+		     return "-";
+		}
 	</script>	
 </body>
 </html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>REGISTER</title>
+
+	<link href="/style/bootstrap.min.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
+	<link href="/style/layout.css" rel="stylesheet" />
+
+    <!--[if lt IE 9]>
+    <script src="/javascript/html5shiv.js"></script>
+    <script src="/javascript/respond.min.js"></script>
+	<![endif]-->
+	<style>
+        .mask {       
+            position: absolute; 
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0; 
+            filter: alpha(opacity=70);
+            background-color: rgba(49, 46, 51, 1);     
+            z-index: 99999;
+            left: 0px;     
+            opacity: 0.6;
+            -moz-opacity: 0.6;
+            text-align: center;
+            display: none;
+        }
+        .W180{width:180px;}
+        .W150{width:150px;}
+        .W100{width:100px;}
+        .W30{width:30px;}
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/console"><span>register</span></a>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group" style="font-weight: 600;color: #30a5ff;text-transform: uppercase;text-align: right;">
+				Welcome<br/><span>HELLO</span>&nbsp;<span>WORLD</span>
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="/console/face_upload"><span class="glyphicon glyphicon-user"></span> Face Upload</a></li>
+            <li><a href="/console/face_register"><span class="glyphicon glyphicon-list-alt"></span> User Management</a></li>
+			<li><a href="/console/face_task"><span class="glyphicon glyphicon-folder-open"></span> Task Management</a></li>
+			<li><a href="/console/face_config"><span class="glyphicon glyphicon-ok"></span> Config Info</a></li>
+			<li><a href="/console/face_detect"><span class="glyphicon glyphicon-random"></span> Face Detect</a></li>
+		</ul>
+	</div><!--/.sidebar-->
+
+    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
+				<li class="active">Upload Your Photo</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row" style="display:none;">
+			<div class="col-lg-12">
+				<h1 class="page-header">Task allocation</h1>
+			</div>
+		</div><!--/.row-->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        
+                        <form role="form"
+                          class="form-horizontal form-uploadfiles"
+                          enctype="multipart/form-data"
+                          method="POST">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label">Your Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="name" name="name"/>
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="translateFile" class="col-sm-3 control-label">Your Photo</label>
+                            <div class="col-sm-8">
+                                <input style="display:none;" 
+                                    type="file" 
+                                    id="translateFile" 
+                                    name="translateFile" 
+                                    onchange="javascript:$('#translateFileView').val(this.value.substr(this.value.lastIndexOf('\\') + 1));"
+                                    required="required" />
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="translateFileView" readonly="readonly" />
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-success" type="button" onclick="javascript:$('#translateFile').click();">Choose</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                                <button type="button" class="btn btn-primary btn-upload-confirm">Confirm</button>
+                            </div>
+                        </div>
+
+					</form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div><!--/.row-->
+	</div>	<!--/.main-->
+
+	
+
+ 
+    
+    <div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+  
+
+    <div class="mask">
+        <img src="/images/1831f5d788adb741537f7468c32acea0.gif" />
+    </div>
+
+   	<script src="/javascript/jquery-1.11.1.min.js"></script>
+	<script src="/javascript/bootstrap.min.js"></script>
+    <script src="/javascript/bootstrap-table.min.js"></script>
+    <script src="/javascript/colResizable-1.6.min.js"></script>
+    <script src="/javascript/bootstrap-table-resizable.min.js"></script>
+	<script>
+	//显示遮罩层    
+    function showMask(){
+        $(".mask").show();     
+    }  
+    //隐藏遮罩层  
+    function hideMask(){            
+        $(".mask").hide();     
+    }
+	
+	$(".btn-upload-confirm").click(function() {
+        var message = undefined;
+            var file = $("#translateFile")[0].files[0];
+            if (file != undefined) {
+                var form = new FormData();
+                form.append("name", $("input[id='name']").val());
+                form.append("file", $("#translateFile")[0].files[0]);
+                $.ajax({ 
+                    url: "/console/project_management/upload2", 
+                    type: "post", 
+                    data: form, 
+                    processData: false, 
+                    contentType: false,
+                    beforeSend: function(){
+                        showMask();
+                    },
+                    success: function(r) {
+                        hideMask();
+                        if (r.status == "SUCCEED") {
+                            $("#dialog-return").find(".modal-body").html("Upload succeeded.");
+                            $("#dialog-return").modal("show");
+    
+                            $(".panel.panel-default").find("button[name='refresh']").click();
+                        } else {
+                            if (r.message.WARNING) {
+                                $("#dialog-return").find(".modal-body").html(r.message.WARNING);
+                                $("#dialog-return").modal("show");
+                            }
+                        }
+                    }, 
+                    error: function(r) {
+                        hideMask();
+                        $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
+                        $("#dialog-return").modal("show");
+                    } 
+                });
+            } else {
+                message = "Please choose the file.";
+            }
+        
+        if (message != undefined) {
+	        $("#dialog-return").find(".modal-body").html(message);
+	        $("#dialog-return").modal("show");
+	    }
+    });
+	</script>	
+</body>
+</html>

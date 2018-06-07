@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "FACE_USERS")
 public class User implements UserDetails, Serializable {
 
     public final static String ROLE_ADMINISTRATOR = "A";
@@ -22,6 +22,7 @@ public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Column(name = "USERNAME", length = 30, unique = true)

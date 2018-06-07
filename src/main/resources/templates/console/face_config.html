@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>GBMS</title>
+	<title>Config</title>
 
 	<link href="/style/bootstrap.min.css" rel="stylesheet" />
 	<link href="/style/layout.css" rel="stylesheet" />
@@ -25,7 +25,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/console"><span>GBMS</span></a>
+				<a class="navbar-brand" href="/console"><span>Config</span></a>
 			</div>
 		</div><!-- /.container-fluid -->
 	</nav>
@@ -33,17 +33,15 @@
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<form role="search">
 			<div class="form-group" style="font-weight: 600;color: #30a5ff;text-transform: uppercase;text-align: right;">
-				Welcome<br/><span th:text="${session.user.firstName}">HELLO</span>&nbsp;<span th:text="${session.user.lastName}">WORLD</span>
+				Welcome<br/><span>HELLO</span>&nbsp;<span>WORLD</span>
 			</div>
 		</form>
 		<ul class="nav menu">
-			<li th:if="${session.user.role} == 'A'"><a href="/console/user_management"><span class="glyphicon glyphicon-user"></span> User management</a></li>
-			<li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
-			<li th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
-			<li th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
-			<li role="presentation" class="divider"></li>
-			<li class="active"><a href="/console/profile"><span class="glyphicon glyphicon-cog"></span> Profile</a></li>
-			<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+			<li><a href="/console/face_upload"><span class="glyphicon glyphicon-user"></span> Face Upload</a></li>
+            <li><a href="/console/face_register"><span class="glyphicon glyphicon-list-alt"></span> User Management</a></li>
+			<li><a href="/console/face_task"><span class="glyphicon glyphicon-folder-open"></span> Task Management</a></li>
+			<li class="active"><a href="/console/face_config"><span class="glyphicon glyphicon-ok"></span> Config Info</a></li>
+			<li><a href="/console/face_detect"><span class="glyphicon glyphicon-random"></span> Face Detect</a></li>
 		</ul>
 	</div><!--/.sidebar-->
 		
@@ -51,68 +49,83 @@
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
-				<li class="active">Profile</li>
+				<li class="active">Config Info</li>
 			</ol>
 		</div><!--/.row-->
 		
-		<div class="row">
+		<div class="row" style="display:none;">
 			<div class="col-lg-12">
-				<h1 class="page-header">Profile</h1>
+				<h1 class="page-header">Config Info</h1>
 			</div>
 		</div><!--/.row-->
 
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading"><span class="glyphicon glyphicon-user"></span> User Info</div>
-					<div class="panel-body">
+					<div class="panel-heading" style="display:none;"><span class="glyphicon glyphicon-user"></span>Config Info</div>
+					<div id="config-info" class="panel-body">
 						<form class="form-horizontal form-profile-save" method="post">
 							<fieldset>
-                                <input type="text" style="display:none;" id="id" name="id" th:value="${user.id}" />
-                                <input type="text" style="display:none;" id="version" name="version" th:value="${user.version}" />
+                                <input type="text" style="display:none;" id="id" name="id" />
+                                <input type="text" style="display:none;" id="version" name="version" />
                                 <div class="form-group">
-                                    <label for="username" class="col-sm-3 control-label">Username</label>
+                                    <label for="serverIP" class="col-sm-3 control-label">Server IP</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
+                                        <input type="text" class="form-control" id="serverIP" name="serverIP" maxlength="30" required="required" />
                                     </div>
                                     <div class="col-sm-4"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                                    <label for="imageDBName" class="col-sm-3 control-label">imageDB name</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" id="firstName" name="firstName" th:value="${user.firstName}" maxlength="30" />
+                                        <input type="text" class="form-control" id="imageDBName" name="imageDBName" maxlength="30" required="required" />
                                     </div>
                                     <div class="col-sm-4"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+                                    <label for="userquality" class="col-sm-3 control-label">User's image quality score</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" id="lastName" name="lastName" th:value="${user.lastName}" maxlength="30" />
+                                        <input type="text" class="form-control" id="userquality" name="userquality" maxlength="30" required="required" />
                                     </div>
                                     <div class="col-sm-4"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email" class="col-sm-3 control-label">Email</label>
+                                    <label for="visitorquality" class="col-sm-3 control-label">Visitor's image quality score</label>
                                     <div class="col-sm-5">
-                                        <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" data-toggle="tooltip" data-placement="top" maxlength="200" placeholder="e.g john@example.com" />
+                                        <input type="text" class="form-control" id="visitorquality" name="visitorquality" maxlength="30" required="required" />
                                     </div>
                                     <div class="col-sm-4"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password" class="col-sm-3 control-label">Password</label>
+                                    <label for="similarscore" class="col-sm-3 control-label">Similarity degree score</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" id="password" name="password" data-toggle="tooltip" maxlength="20" data-placement="bottom" />
+                                        <input type="text" class="form-control" id="similarscore" name="similarscore" maxlength="30" required="required" />
                                     </div>
                                     <div class="col-sm-4"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
+                                    <label for="time1" class="col-sm-3 control-label">Opening time interval</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" maxlength="20" />
+                                        <input type="text" class="form-control" id="time1" name="time1" maxlength="30" required="required" />
                                     </div>
                                     <div class="col-sm-4"></div>
                                 </div>
-								<div class="form-group">
+                                <div class="form-group">
+                                    <label for="time2" class="col-sm-3 control-label">Time interval of the same user identification</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="time2" name="time2" maxlength="30" required="required" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time3" class="col-sm-3 control-label">Popup disappearance time</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" id="time3" name="time3" maxlength="30" required="required" />
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                                
+                                <div class="form-group">
 									<div class="col-md-12 widget-left">
                                         <button type="button" class="btn btn-primary form-profile-save pull-left">Save Changes</button>
 									</div>
@@ -167,7 +180,7 @@
 		    _reset_input($(".form-horizontal.form-profile-save").find("input"));
 
             var data = $(".form-horizontal.form-profile-save").serializeArray();
-            $.post("/console/profile/save", data, function(r, status) {
+            $.post("/console/faceconfig_management/save", data, function(r, status) {
                 if (r.status == "SUCCEED") {
                     $(".bs-example-modal-sm").find(".modal-body").html("Modified successfully.");
                     $(".bs-example-modal-sm").modal("show");
@@ -178,18 +191,7 @@
                     if (r.message.username) {
                         _set($(".form-horizontal.form-profile-save").find("input[id='username']"), r.message.username);
                     }
-                    if (r.message.email) {
-                        _set($(".form-horizontal.form-profile-save").find("input[id='email']"), r.message.email);
-                    }
-                    if (r.message.password) {
-                        _set($(".form-horizontal.form-profile-save").find("input[id='password']"), r.message.password);
-                    }
-                    if (r.message.firstName) {
-                        _set($(".form-horizontal.form-profile-save").find("input[id='firstName']"), r.message.firstName);
-                    }
-                    if (r.message.lastName) {
-                        _set($(".form-horizontal.form-profile-save").find("input[id='lastName']"), r.message.lastName);
-                    }
+                    
                     if (r.message.WARNING) {
                         $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
                         $(".bs-example-modal-sm").modal("show");
@@ -197,6 +199,21 @@
                 }
             });
         });
+		
+		$(document).ready(function() {
+			$.get("/console/faceconfig_management/get/1", null, function(r, status) {
+                $("#config-info").find("input[id='id']").val(r.id);
+                $("#config-info").find("input[id='version']").val(r.version);
+                $("#config-info").find("input[id='serverIP']").val(r.serverIP);
+                $("#config-info").find("input[id='imageDBName']").val(r.imageDBName);
+                $("#config-info").find("input[id='userquality']").val(r.userquality);
+                $("#config-info").find("input[id='visitorquality']").val(r.visitorquality);
+                $("#config-info").find("input[id='similarscore']").val(r.similarscore);
+                $("#config-info").find("input[id='time1']").val(r.time1);
+                $("#config-info").find("input[id='time2']").val(r.time2);
+                $("#config-info").find("input[id='time3']").val(r.time3);
+            });
+	    });
 	</script>	
 </body>
 </html>

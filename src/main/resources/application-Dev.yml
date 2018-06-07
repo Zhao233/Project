@@ -2,7 +2,9 @@
 spring.profile.name: application-Dev.yml
 
 server:
-  connection-timeout: 30
+  # connection-timeout: 60000
+  session:
+    timeout: 9000 # 30'
 
 spring:
   http:
@@ -19,9 +21,9 @@ spring:
     cache: false
   # 配置数据库连接信息
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/helloworld?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-    username: root
-    password: "0000000"
+    url: jdbc:mysql://gbmsdb.mysqldb.chinacloudapi.cn:3306/byface?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    username: gbmsdb%gbmsdb
+    password: "GBms1GBms1"
     driver-class-name: com.mysql.cj.jdbc.Driver
     tomcat:
       max-active: 10

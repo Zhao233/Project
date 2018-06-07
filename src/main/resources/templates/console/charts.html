@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lumino - Charts</title>
+
+<link href="/style/bootstrap.min.css" rel="stylesheet" />
+<link href="/style/datepicker3.css" rel="stylesheet" />
+<link href="/style/styles.css" rel="stylesheet" />
+
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/console/face_detect"><span>Chart</span></a>
+
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div>			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active">Chart</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row" style="display:none;">
+			<div class="col-lg-12">
+				<h1 class="page-header">Chart</h1>
+				
+			</div>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Line Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
+		
+		<div class="row" style="display:none;">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Bar Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="main-chart" id="bar-chart" height="200" width="600"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->		
+		
+		<div class="row" style="display:none;">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Pie Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="chart" id="pie-chart" ></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Doughnut Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="chart" id="doughnut-chart" ></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
+		
+		<div class="row" style="display:none;">
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Label:</h4>
+						<div class="easypiechart" id="easypiechart-blue" data-percent="92" ><span class="percent">92%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Label:</h4>
+						<div class="easypiechart" id="easypiechart-orange" data-percent="65" ><span class="percent">65%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Label:</h4>
+						<div class="easypiechart" id="easypiechart-teal" data-percent="56" ><span class="percent">56%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Label:</h4>
+						<div class="easypiechart" id="easypiechart-red" data-percent="27" ><span class="percent">27%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
+											
+	</div>	<!--/.main-->
+	  
+
+	<script src="/javascript/jquery-1.11.1.min.js"></script>
+	<script src="/javascript/bootstrap.min.js"></script>
+	<script src="/javascript/chart.min.js"></script>
+	<script src="/javascript/chart-data.js"></script>
+	<script src="/javascript/easypiechart.js"></script>
+	<script src="/javascript/easypiechart-data.js"></script>
+	<script src="/javascript/bootstrap-datepicker.js"></script>
+	<script>
+	
+	//alert(11111);
+
+	var args = window.location.href.split("?");
+    //alert(args[1]);
+	
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		
+	 var datastring;
+	 var data0;
+	 var data1;
+	 var data2;
+	 var data3;
+	 var data4;
+	 var data5;
+	 var data6;
+	 var data7;
+	 var data8;
+	 var data9;
+	 var data10;
+	 var data11;
+	 var data12;
+	 var data13;
+	 var data14;
+	 var data15;
+	 var data16;
+	 var data17;
+	 var data18;
+	 var data19;
+	 var data20;
+	 var data21;
+	 var data22;
+	 var data23;
+		
+		
+		
+		
+var defaults = {
+	//网格线是否在数据线的上面
+	scaleOverlay : false,
+
+	//是否用硬编码重写y轴网格线
+	scaleOverride : false,
+
+	//** Required if scaleOverride is true **
+	//y轴刻度的个数
+	scaleSteps : null,
+
+	//y轴每个刻度的宽度
+	scaleStepWidth : 20,
+
+	// Y 轴的起始值
+	scaleStartValue : null,
+	// Y/X轴的颜色
+	scaleLineColor: "rgba(0,0,0,.1)",   
+	// X,Y轴的宽度
+	scaleLineWidth: 1,
+	// 刻度是否显示标签, 即Y轴上是否显示文字
+	scaleShowLabels: true,
+	// Y轴上的刻度,即文字
+	scaleLabel: "10",
+	// 字体
+	scaleFontFamily: "'Arial'",
+	// 文字大小
+	scaleFontSize: 16,
+	// 文字样式
+	scaleFontStyle: "normal",
+	// 文字颜色
+	scaleFontColor: "#009966",
+	// 是否显示网格
+	scaleShowGridLines: true,
+	// 网格颜色
+	scaleGridLineColor: "rgba(0,0,0,.05)",
+	// 网格宽度
+	scaleGridLineWidth:2,
+	// 是否使用贝塞尔曲线? 即:线条是否弯曲
+	bezierCurve: true,
+	// 是否显示点数
+	pointDot: true,
+	// 圆点的大小
+	pointDotRadius:5,
+	// 圆点的笔触宽度, 即:圆点外层白色大小
+	pointDotStrokeWidth: 2,
+	// 数据集行程(连线路径)
+	datasetStroke: true,
+	// 线条的宽度, 即:数据集
+	datasetStrokeWidth: 2,
+	// 是否填充数据集
+	datasetFill: true,
+	// 是否执行动画
+	animation: true,
+	// 动画的时间
+	animationSteps: 60,
+	// 动画的特效
+	animationEasing: "easeOutQuart",
+	// 动画完成时的执行函数
+	//onAnimationComplete: null
+}
+
+var lineChartData = {
+		 labels : ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
+		 datasets : [
+		 	{
+		 		fillColor : "rgba(151,187,205,0.5)",
+		 		strokeColor : "rgba(151,187,205,1)",
+		 		pointColor : "rgba(151,187,205,1)",
+		 		pointStrokeColor : "#fff",
+		 		data : [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		 	}
+		 ]
+
+		 };		
+	
+var myLine;
+		
+	    	
+$(document).ready(function() {
+	$.ajaxSettings.async = false;
+	$.get("/console/project_management/getchart/"+args[1], null, function(r, status) {
+		 
+			datastring = r.status;
+			 data0 = r.h0;
+			 data1 = r.h1;
+			 data2 = r.h2;
+			 data3 = r.h3;
+			 data4 = r.h4;
+			 data5 = r.h5;
+			 data6 = r.h6;
+			 data7 = r.h7;
+			 data8 = r.h8;
+			 data9 = r.h9;
+			 data10 = r.h10;
+			 data11 = r.h11;
+			 data12 = r.h12;
+			 data13 = r.h13;
+			 data14 = r.h14;
+			 data15 = r.h15;
+			 data16 = r.h16;
+			 data17 = r.h17;
+			 data18 = r.h18;
+			 data19 = r.h19;
+			 data20 = r.h20;
+			 data21 = r.h21;
+			 data22 = r.h22;
+			 data23 = r.h23;
+			 
+			 
+			 lineChartData = datastring;
+			 
+			
+			 
+			 //alert(lineChartData);
+			 
+			 //lineChartData.datasets[0].data = datastring;
+					 	    	
+			myLine = new Chart(document.getElementById("line-chart").getContext("2d")).Line(lineChartData,defaults);
+			 
+			 //lineChartData.datasets[0].data = datastring;
+			 
+			 //myLine = new Chart(document.getElementById("line-chart").getContext("2d")).Line(lineChartData,defaults);
+	    		
+	    		//totalnumber = r.status;
+	    		//totalnumber = 0;
+	    		//alert(totalnumber);
+
+			
+	    	
+	        });
+	$.ajaxSettings.async = true;
+});   	
+	    	
+	    	
+	 
+		
+	</script>	
+</body>
+
+</html>

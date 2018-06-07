@@ -61,8 +61,8 @@
 			<li th:if="${session.user.role} == 'A'"><a href="/console/user_management"><span class="glyphicon glyphicon-user"></span> User management</a></li>
 			<li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
 			<li th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
-			<li class="active" th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
-			<li th:if="${session.user.role} == 'S'"><a href="/console/task_management_complete"><span class="glyphicon glyphicon-list-alt"></span> Task completed</a></li>
+			<li th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
+			<li class="active" th:if="${session.user.role} == 'S'"><a href="/console/task_management_complete"><span class="glyphicon glyphicon-list-alt"></span> Task completed</a></li>
 			<li role="presentation" class="divider"></li>
             <li><a href="/console/profile"><span class="glyphicon glyphicon-cog"></span> Profile</a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -87,14 +87,11 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <button class="btn btn-danger btn-rejet" type="button" data-toggle="modal">Reject</button>
-                        <button class="btn btn-success btn-commit" data-toggle="modal">Claim</button>
-                        <button class="btn btn-primary btn-check-in" data-toggle="modal">Upload</button>
-                        <button class="btn btn-primary btn-delivery" data-toggle="modal">Deliver</button>
+
                     </div>
                     <div class="panel-body" style="overflow-y: scroll;height: 500px;">
                         <table data-toggle="table"
-                               data-url="/console/project_management/task_list"
+                               data-url="/console/project_management/task_list_completed"
 							   data-method="get"
 							   data-striped="true"
 							   data-show-refresh="true"
@@ -176,7 +173,7 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
-    <div class="modal fade bs-example-modal-sm" style="z-index:99998" tabindex="-1" role="dialog">
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -200,18 +197,6 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger btn-task-delivery-confirm" data-dismiss="modal">Confirm</button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    
-    <div id="dialog-return" class="modal fade" style="z-index:99999" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
-                </div>
-                <div class="modal-body"></div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -294,8 +279,8 @@
                     $(".bs-example-modal-sm").modal("show");
                 });
 		    } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
         
@@ -304,13 +289,13 @@
 		    if (id != undefined) {
                 // 读取Project选中的用户信息
                 $.get("/console/project_management/get/" + id, null, function(r, status) {
-                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure to \"Deliver\" " + r.name + " project?");
+                    $(".bs-example-modal-sm").find(".modal-body").html("Are you sure to \"Delivery\" " + r.name + " project?");
 		            $(".bs-example-modal-sm").find(".modal-footer-delivery-confirm").css("display", "");
                     $(".bs-example-modal-sm").modal("show");
                 });
 		    } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
 
@@ -320,20 +305,20 @@
                 var data = {"id": id};
                 $.post("/console/project_management/commit", data, function(r, status) {
                     if (r.status == "SUCCEED") {
-                        $("#dialog-return").find(".modal-body").html("Claim succeeded.");
-                        $("#dialog-return").modal("show");
+                        $(".bs-example-modal-sm").find(".modal-body").html("Claim succeeded.");
+                        $(".bs-example-modal-sm").modal("show");
 
                         $(".panel.panel-default").find("button[name='refresh']").click();
                     } else {
                         if (r.message.WARNING) {
-                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                            $("#dialog-return").modal("show");
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
                         }
                     }
                 });
             } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
         
@@ -343,43 +328,35 @@
                 var data = {"id": id};
                 $.post("/console/project_management/delivery", data, function(r, status) {
                     if (r.status == "SUCCEED") {
-                        $("#dialog-return").find(".modal-body").html("Deliver succeeded.");
-                        $("#dialog-return").modal("show");
+                        $(".bs-example-modal-sm").find(".modal-body").html("Delivery succeeded.");
+                        $(".bs-example-modal-sm").modal("show");
 
                         $(".panel.panel-default").find("button[name='refresh']").click();
                     } else {
                         if (r.message.WARNING) {
-                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                            $("#dialog-return").modal("show");
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
                         }
                     }
                 });
             } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
 
-        $(".btn.btn-danger.btn-rejet").click(function() {
-        	//alert(123321);
+        $(".btn.btn-default.btn-rejet").click(function() {
             var id = $("input[name='_project_id']:checked").val();
-            //alert(222222);
-            //alert(id);
 		    if (id != undefined) {
-		    //alert(333333);
                 // 读取Project选中的用户信息
                 $.get("/console/project_management/get/" + id, null, function(r, status) {
-                	//alert(r.name);
                     $(".bs-example-modal-sm").find(".modal-body").html("Are you sure to \"Reject\" " + r.name + " project?");
 		            $(".bs-example-modal-sm").find(".modal-footer-rejet-confirm").css("display", "");
-		            //$(".bs-example-modal-sm").modal({backdrop: 'static', keyboard: false});
                     $(".bs-example-modal-sm").modal("show");
-                    //alert(555555);
                 });
-            //alert(444444);
 		    } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
 
@@ -389,22 +366,20 @@
                 var data = {"id": id};
                 $.post("/console/project_management/rejet", data, function(r, status) {
                     if (r.status == "SUCCEED") {
-                    	//alert(666666);
-                        $("#dialog-return").find(".modal-body").html("Reject succeeded.");
-                        $("#dialog-return").modal("show");
-                        //alert(777777);
+                        $(".bs-example-modal-sm").find(".modal-body").html("Reject succeeded.");
+                        $(".bs-example-modal-sm").modal("show");
+
                         $(".panel.panel-default").find("button[name='refresh']").click();
-                        //alert(888888);
                     } else {
                         if (r.message.WARNING) {
-                            $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                            $("#dialog-return").modal("show");
+                            $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                            $(".bs-example-modal-sm").modal("show");
                         }
                     }
                 });
             } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
 
@@ -419,8 +394,8 @@
                     $("#dialog-uploadfiles").modal("show");
                 });
             } else {
-		        $("#dialog-return").find(".modal-body").html("You did not select the task.");
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html("You did not select the task.");
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
 
@@ -445,22 +420,22 @@
                         success: function(r) {
                             hideMask();
                             if (r.status == "SUCCEED") {
-                                $("#dialog-return").find(".modal-body").html("Upload succeeded.");
-                                $("#dialog-return").modal("show");
+                                $(".bs-example-modal-sm").find(".modal-body").html("Upload succeeded.");
+                                $(".bs-example-modal-sm").modal("show");
                                 $("#dialog-uploadfiles").modal("hide");
         
                                 $(".panel.panel-default").find("button[name='refresh']").click();
                             } else {
                                 if (r.message.WARNING) {
-                                    $("#dialog-return").find(".modal-body").html(r.message.WARNING);
-                                    $("#dialog-return").modal("show");
+                                    $(".bs-example-modal-sm").find(".modal-body").html(r.message.WARNING);
+                                    $(".bs-example-modal-sm").modal("show");
                                 }
                             }
                         }, 
                         error: function(r) {
                             hideMask();
-                            $("#dialog-return").find(".modal-body").html("Oh snap! System handling failure.");
-                            $("#dialog-return").modal("show");
+                            $(".bs-example-modal-sm").find(".modal-body").html("Oh snap! System handling failure.");
+                            $(".bs-example-modal-sm").modal("show");
                         } 
                     });
                 } else {
@@ -470,8 +445,8 @@
                 message = "You did not select the task.";
             }
             if (message != undefined) {
-		        $("#dialog-return").find(".modal-body").html(message);
-		        $("#dialog-return").modal("show");
+		        $(".bs-example-modal-sm").find(".modal-body").html(message);
+		        $(".bs-example-modal-sm").modal("show");
 		    }
         });
 	</script>	

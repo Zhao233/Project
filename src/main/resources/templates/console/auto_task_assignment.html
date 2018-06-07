@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GBMS</title>
+
+    <link href="/style/bootstrap.min.css" rel="stylesheet" />
+    <link href="/style/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="/style/layout.css" rel="stylesheet" />
+
+    <!--[if lt IE 9]>
+    <script src="/javascript/html5shiv.js"></script>
+    <script src="/javascript/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/console"><span>GBMS</span></a>
+        </div>
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <form role="search">
+        <div class="form-group" style="font-weight: 600;color: #30a5ff;text-transform: uppercase;text-align: right;">
+            Welcome<br/><span th:text="${session.user.firstName}">HELLO</span>&nbsp;<span th:text="${session.user.lastName}">WORLD</span>
+        </div>
+    </form>
+    <ul class="nav menu">
+        <li th:if="${session.user.role} == 'A'"><a href="/console/user_management"><span class="glyphicon glyphicon-user"></span> User management</a></li>
+        <li class="active" th:if="${session.user.role} == 'A'"><a href="/console/auto_task_assignment"><span class="glyphicon glyphicon-random"></span> Auto Task Assignment</a></li>
+        <li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
+        <li th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
+        <li th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
+        <li role="presentation" class="divider"></li>
+        <li><a href="/console/profile"><span class="glyphicon glyphicon-cog"></span> Profile</a></li>
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+</div><!--/.sidebar-->
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#"><span class="glyphicon glyphicon-random"></span></a></li>
+            <li class="active">Auto Task Assignment</li>
+        </ol>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Auto Task Assignment</h1>
+        </div>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button class="btn btn-primary open-add-new-rule-dialog" data-toggle="modal">Add New Rule</button>
+                    <button class="btn btn-default open-update-rule-dialog" data-toggle="modal">Update Rule</button>
+                </div>
+                <div class="panel-body">
+                    <table id="_table_autoTaskAssignment_search">
+                        <thead>
+                        <tr>
+                            <th data-field="id" data-formatter="_formatte_id" data-align="center">#</th>
+                            <th data-field="local">Local</th>
+                            <th data-field="supplierName1">First Supplier</th>
+                            <th data-field="supplierName2">Second Supplier</th>
+                            <th data-field="supplierName3">Third Supplier</th>
+                            <th data-field="policyName">Policy</th>
+                            <th data-field="substring">Substring</th>
+                            <th data-field="vaildName">Vaild</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!--/.row-->
+</div>	<!--/.main-->
+
+<div id="dialog-rule-management-update" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Auto Task Assignment  | <span id="dialog-rule-management-update-title"></span></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal add-new-rule" method="POST">
+                    <input type="text" style="display:none;" id="id" name="id" />
+                    <input type="text" style="display:none;" id="version" name="version" />
+                    <div class="form-group">
+                        <label for="local" class="col-sm-4 control-label">Local</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="local" name="local" data-toggle="tooltip" data-placement="top" maxlength="30" required="required" />
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                            <label for="supplier1" class="col-sm-4 control-label">First Supplier</label>
+                            <div class="col-sm-7">
+                                <select id="supplier1" name="supplier1" class="form-control selectpicker" required="required">
+                                </select>
+                            </div>
+                            <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                            <label for="supplier2" class="col-sm-4 control-label">Second Supplier</label>
+                            <div class="col-sm-7">
+                                <select id="supplier2" name="supplier2" class="form-control selectpicker" required="required">
+                                </select>
+                            </div>
+                            <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                            <label for="supplier3" class="col-sm-4 control-label">Third Supplier</label>
+                            <div class="col-sm-7">
+                                <select id="supplier3" name="supplier3" class="form-control selectpicker" required="required">
+                                </select>
+                            </div>
+                            <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                            <label for="policy" class="col-sm-4 control-label">Policy</label>
+                            <div class="col-sm-7">
+                                <select id="policy" name="policy" class="form-control" required="required">
+                                    <option value="1">Order</option>
+                                    <option value="2">MeanWhile</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+						    <label for="substring" class="col-sm-4 control-label">Substring</label>
+							<div class="col-sm-7">
+							    <textarea id="substring" name="substring" class="form-control"></textarea>
+						    </div>
+							<div class="col-sm-1"></div>
+				    </div>
+                    <div class="form-group">
+                            <label for="valid" class="col-sm-4 control-label">Valid</label>
+                            <div class="col-sm-7">
+                                <select id="valid" name="valid" class="form-control" required="required">
+                                    <option value="true">Effective</option>
+                                    <option value="false">Invalid</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9" style="text-align: right;padding-top: 20px;">
+                            <button type="button" class="btn btn-default add-new-rule-close" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary add-new-rule">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">MESSAGE</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script src="/javascript/jquery-1.11.1.min.js"></script>
+<script src="/javascript/bootstrap.min.js"></script>
+<script src="/javascript/bootstrap-table.min.js"></script>
+<script>
+    !function ($) {
+        $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show');
+        else $('#sidebar-collapse').collapse('hide');
+    });
+
+    function _formatte_id(value, row, index) {
+        return '<input name="id" type="radio" value="' + value + '" />';
+    }
+
+    function _reset(from) {
+        from[0].reset();
+        _reset_input(from.find("input"));
+    }
+
+    function _reset_input(input) {
+        input.removeClass("alert-danger");
+        input.tooltip('destroy');
+    }
+
+    function _set(el, message) {
+        el.addClass("alert-danger");
+        el.attr("title", message);
+        el.tooltip('show');
+    }
+    
+    $(".btn.btn-primary.open-add-new-rule-dialog").click(function() {
+        _reset($(".form-horizontal.add-new-rule"));
+        $("#dialog-rule-management-update-title").html("Add new rule");
+        $("#dialog-rule-management-update").modal("show");
+    });
+
+    $(".btn.btn-default.open-update-rule-dialog").click(function() {
+        var id = $("input[type='radio']:checked").val();
+        if (id != undefined) {
+            _reset($(".form-horizontal.add-new-rule"));
+            // 读取用户选中的用户信息
+            $.get("/console/auto_task_assignment/get/" + id, null, function(r, status) {
+                $("#dialog-rule-management-update").find("input[id='id']").val(r.id);
+                $("#dialog-rule-management-update").find("input[id='version']").val(r.version);
+                $("#dialog-rule-management-update").find("input[id='local']").val(r.local);
+                $("#dialog-rule-management-update").find("select[id='supplier1']").val(r.supplier1.id);
+                $("#dialog-rule-management-update").find("select[id='supplier2']").val(r.supplier2.id);
+                $("#dialog-rule-management-update").find("select[id='supplier3']").val(r.supplier3.id);
+                $("#dialog-rule-management-update").find("select[id='policy']").val(r.policy);
+                $("#dialog-rule-management-update").find("textarea[id='substring']").val(r.substring);
+                $("#dialog-rule-management-update").find("select[id='valid']").val(r.valid ? "true" : "false");
+
+                $("#dialog-rule-management-update-title").html("Update rule");
+                $("#dialog-rule-management-update").modal("show");
+            });
+        } else {
+            $(".bs-example-modal-sm").find(".modal-body").html("You did not select the rule.");
+            $(".bs-example-modal-sm").modal("show");
+        }
+    });
+
+    $(".btn.btn-primary.add-new-rule").click(function() {
+        _reset_input($(".form-horizontal.add-new-rule").find("input"));
+
+        var data = $(".form-horizontal.add-new-rule").serializeArray();
+        $.post("/console/auto_task_assignment/save", data, function(r, status) {
+            if (r.status == "SUCCEED") {
+                $(".bs-example-modal-sm").find(".modal-body").html(
+                    $("#dialog-rule-management-update-title").html() + " succeeded."
+                );
+                $(".bs-example-modal-sm").modal("show");
+                $(".btn.btn-default.add-new-rule-close").click();
+                $(".panel.panel-default").find("button[name='refresh']").click();
+                // location.reload();
+            } else {
+                if (r.message.local) {
+                    _set($(".form-horizontal.add-new-rule").find("input[id='local']"), r.message.local);
+                }
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $('#_table_autoTaskAssignment_search').bootstrapTable({
+            method: 'get',
+            url: "/console/auto_task_assignment/search",
+            striped: true,
+            dataType: "json",
+            pagination: true,
+            queryParamsType: "limit",
+            singleSelect: true,
+            contentType: "application/x-www-form-urlencoded",
+            pageSize: 10,
+            pageNumber:1,
+            search: true,
+            showColumns: true,
+            showRefresh: true,
+            sidePagination: "server",
+            queryParams: function(params) {
+                return {
+                    limit: params.limit,
+                    offset: params.offset / params.limit,
+                    search: $(".search").find("input").val()
+                };
+            },
+            responseHandler: function(res) {
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                };
+            }
+        });
+        
+        $.ajax({  
+        	url: "/console/project_management/supplier_list",  
+            dataType: "json",  
+            success: function (data) {
+            	//alert(data);
+            	//data = "[{\"id\":2,\"username\":\"supplier1\",\"firstName\":\"supplier\"}]";
+            	
+                for(var i = 0; data[i] != null; i++) {
+                    $('.selectpicker').append("<option value=" + data[i].id + ">" + data[i].firstName + " " + data[i].lastName + "</option>");
+                    //alert(data[i].id);
+                }  
+                // 缺一不可  
+                $('.selectpicker').selectpicker('refresh');  
+                $('.selectpicker').selectpicker('render');  
+            }  
+        });
+    });
+</script>
+</body>
+</html>

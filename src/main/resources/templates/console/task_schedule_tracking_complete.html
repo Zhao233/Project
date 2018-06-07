@@ -44,8 +44,8 @@
 		</form>
 		<ul class="nav menu">
 			<li th:if="${session.user.role} == 'A'"><a href="/console/user_management"><span class="glyphicon glyphicon-user"></span> User management</a></li>
-			<li class="active" th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
-			<li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking_complete"><span class="glyphicon glyphicon-ok"></span> Task completed</a></li>
+			<li th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking"><span class="glyphicon glyphicon-ok"></span> Task schedule tracking</a></li>
+			<li class="active" th:if="${session.user.role} == 'C'"><a href="/console/task_schedule_tracking_complete"><span class="glyphicon glyphicon-ok"></span> Task completed</a></li>
 			<li th:if="${session.user.role} == 'PM'"><a href="/console/task_allocation"><span class="glyphicon glyphicon-folder-open"></span> Task allocation</a></li>
 			<li th:if="${session.user.role} == 'S'"><a href="/console/task_management"><span class="glyphicon glyphicon-list-alt"></span> Task management</a></li>
 			<li role="presentation" class="divider"></li>
@@ -72,21 +72,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body" style="overflow-y: scroll;height: 500px;">
-                        <!--<table id="_table_project_search">-->
-                        <table data-toggle="table"
-                               data-url="/console/project_management/search_list"
-							   data-method="get"
-							   data-striped="true"
-							   data-show-refresh="true"
-							   data-show-toggle="false"
-							   data-show-columns="true"
-							   data-search="true"
-							   data-pagination="true"
-							   data-sidePagination="client"
-							   data-cache="false"
-							   data-resizable="true"
-							   data-sort-name="name"
-							   data-idField="id">
+                        <table id="_table_project_search">
                             <thead>
                                 <tr>
                                     <th data-field="index" data-formatter="_index_formatter" class="W30">#</th>
@@ -142,11 +128,11 @@
 		function _formatte_supplier_name(value, row, index) {
 		    return '<div style="min-width: 150px;">' + value + '</div>';
 		}
-        /*
+
 		$(document).ready(function() {
             $('#_table_project_search').bootstrapTable({
                 method: 'get',
-                url: "/console/project_management/search",
+                url: "/console/project_management/search_completed",
                 striped: true,
                 dataType: "json",
                 pagination: true,
@@ -178,7 +164,9 @@
                 }
             });
         });
-        */
+		
+		
+		
 	</script>	
 </body>
 </html>

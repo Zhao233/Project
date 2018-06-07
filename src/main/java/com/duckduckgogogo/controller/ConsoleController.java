@@ -45,6 +45,11 @@ public class ConsoleController {
     public ModelAndView toTaskAllocation() {
         return new ModelAndView("console/task_allocation");
     }
+    
+    @RequestMapping("/task_allocation_complete")
+    public ModelAndView toTaskAllocationComplete() {
+        return new ModelAndView("console/task_allocation_complete");
+    }
 
     /**
      * ADMINISTRATOR)
@@ -61,6 +66,11 @@ public class ConsoleController {
     public ModelAndView toTaskScheduleTracking() {
         return new ModelAndView("console/task_schedule_tracking");
     }
+    
+    @RequestMapping("/task_schedule_tracking_complete")
+    public ModelAndView toTaskScheduleTrackingComplete() {
+        return new ModelAndView("console/task_schedule_tracking_complete");
+    }
 
     /**
      * SUPPLIER
@@ -69,5 +79,51 @@ public class ConsoleController {
     public ModelAndView toTaskManagement() {
         return new ModelAndView("console/task_management");
     }
+    
+    @RequestMapping("/task_management_complete")
+    public ModelAndView toTaskManagementComplete() {
+        return new ModelAndView("console/task_management_complete");
+    }
 
+    @RequestMapping("/auto_task_assignment")
+    public ModelAndView toAutoTaskAssignment() {
+        return new ModelAndView("console/auto_task_assignment");
+    }
+    
+    
+    
+    @RequestMapping("/face_upload")
+    public ModelAndView toupload_picture() {
+        return new ModelAndView("console/face_upload");
+    }
+    
+    @RequestMapping("/face_register")
+    public ModelAndView toface_register() {
+        return new ModelAndView("console/face_register");
+    }
+    
+    @RequestMapping("/face_detect")
+    public ModelAndView todetect_picture() {
+        return new ModelAndView("console/face_detect");
+    }
+    
+    @RequestMapping("/face_task")
+    public ModelAndView toface_task() {
+        return new ModelAndView("console/face_task");
+    }
+    
+    @RequestMapping("/face_config")
+    public ModelAndView toface_config() {
+        return new ModelAndView("console/face_config");
+    }
+    
+    @RequestMapping("/charts")
+    public ModelAndView tocharts() {
+        return new ModelAndView("console/charts");
+    }
+    
+    @RequestMapping("/chart")
+    public ModelAndView tochart() {
+        return new ModelAndView("console/chart");
+    }
 }
