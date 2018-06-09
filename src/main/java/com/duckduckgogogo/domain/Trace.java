@@ -9,12 +9,12 @@ import com.duckduckgogogo.controller.ProjectRestController;
 @Entity
 @Table(name = "FACE_TRACE_INHOUSE")
 public class Trace {
-	@Id
+    @Id
     //@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-	
-	@OneToOne
+
+    @OneToOne
     @JoinColumn(name = "STRANGERID")
     private UserInfo user;
 
@@ -26,13 +26,13 @@ public class Trace {
 
     @Column(name = "TRACEDATE")
     private Date tracedate;
-    
+
     @Column(name = "RESULTIDX", length = 100)
     private String resultidx;
-    
+
     @Column(name = "UPDATESTATUS")
     private boolean updatestatus;
-    
+
     @Column(name = "SCORE", length = 100)
     private String score;
 
@@ -43,7 +43,7 @@ public class Trace {
     public void setId(Long id) {
         if (id != null) this.id = id;
     }
-    
+
     public UserInfo getUser() {
         return user;
     }
@@ -61,7 +61,7 @@ public class Trace {
     }
 
     public String getImgurl() {
-        return "http://" + ProjectRestController.configInfo.getServerIP() + ":"+imgurl;
+        return "http://" + ProjectRestController.configInfo.getServerIP() + ":" + imgurl;
     }
 
     public void setImgurl(String imgurl) {
@@ -75,7 +75,7 @@ public class Trace {
     public void setTracedate(Date tracedate) {
         this.tracedate = tracedate;
     }
-    
+
     public String getResultidx() {
         return resultidx;
     }
@@ -91,7 +91,7 @@ public class Trace {
     public void setUpdatestatus(boolean updatestatus) {
         this.updatestatus = updatestatus;
     }
-    
+
     public String getScore() {
         return score;
     }
@@ -99,20 +99,20 @@ public class Trace {
     public void setScore(String score) {
         this.score = score;
     }
-    
+
     public String getUserName() {
         return this.user != null ? this.user.getName() : "";
     }
-    
+
     public String getUserid() {
         return this.user != null ? String.valueOf(this.user.getId()) : "";
     }
-    
+
     public String getImageid() {
-    	return this.user != null ? this.user.getImageid() : "";
+        return this.user != null ? this.user.getImageid() : "";
     }
-    
+
     public String getVisitorImgurl() {
-    	return this.user != null ? this.user.getFeature() : "";
+        return this.user != null ? this.user.getFeature() : "";
     }
 }

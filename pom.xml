@@ -61,6 +61,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,7 +83,7 @@
             <artifactId>javax.mail</artifactId>
             <version>1.5.2</version>
         </dependency>
-        
+
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
@@ -119,24 +120,30 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
-        
+
         <dependency>
-             <groupId>com.oracle</groupId>
-             <artifactId>ojdbc6</artifactId>
-             <version>11.2.0.3</version>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
         </dependency>
 
         <dependency>
-             <groupId>org.springframework.boot</groupId>
-             <artifactId>spring-boot-starter-jdbc</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-        
-        <dependency>  
-		    <groupId>org.eclipse.paho</groupId>  
-		    <artifactId>org.eclipse.paho.client.mqttv3</artifactId>  
-		    <version>1.1.1</version>  
+
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>1.1.1</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -144,6 +151,22 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <dependencies>
+                    <!-- spring热部署 -->
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>springloaded</artifactId>
+                        <version>1.2.6.RELEASE</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <mainClass>cn.springboot.Mainspringboot</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

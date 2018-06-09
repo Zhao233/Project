@@ -27,12 +27,26 @@ public class IndexController {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (user != null) {
+        if (user != null) { //将账户密码置空
             user.setPassword(null);
             request.getSession().setAttribute("user", user);
         }
 
-        if(user.getRole().equals("PM"))
+        switch (user.getRole()) {
+            case "PM":
+                return "redirect:/console/task_allocation";
+            case "S":
+                return "redirect:/console/task_management";
+            case "C":
+                return "redirect:/console/task_schedule_tracking";
+            case "A":
+                return "redirect:/console/user_management";
+
+            default:
+                return "redirect:/console";
+        }
+
+        /*if(user.getRole().equals("PM"))
         {
         	return "redirect:/console/task_allocation";
         }else if(user.getRole().equals("S")){
@@ -40,10 +54,10 @@ public class IndexController {
         }else if(user.getRole().equals("C")){
         	return "redirect:/console/task_schedule_tracking";
         }else if(user.getRole().equals("A")){
-        	return "redirect:/console/user_management";
+
         }else {
         	return "redirect:/console";
-        }
-        	
+        }*/
+
     }
 }

@@ -33,12 +33,12 @@ public class ConfigInfoController {
         configInfo.setTime1(configInfo.getTime1().trim());
         configInfo.setTime2(configInfo.getTime2().trim());
         configInfo.setTime3(configInfo.getTime3().trim());
-        
+
         // "FAILED" "SUCCEED"
 
         if (message.isEmpty()) {
-        	configInfo.setUpdateDate(new Date());
-        	configInfoService.save(configInfo);
+            configInfo.setUpdateDate(new Date());
+            configInfoService.save(configInfo);
 
             r.put("status", "SUCCEED");
         } else {
@@ -48,12 +48,12 @@ public class ConfigInfoController {
 
         return r;
     }
-    
+
     @RequestMapping("/get/{id}")
     @ResponseBody
-    public ConfigInfo get (@PathVariable Integer id) {
-    	ConfigInfo configInfo = configInfoService.findById(id.longValue());
-    	
+    public ConfigInfo get(@PathVariable Integer id) {
+        ConfigInfo configInfo = configInfoService.findById(id.longValue());
+
         return configInfo;
     }
 }

@@ -53,16 +53,16 @@ require('./charts/Chart.Scatter')(Chart);
 // Loading built-in plugins
 var plugins = require('./plugins');
 for (var k in plugins) {
-	if (plugins.hasOwnProperty(k)) {
-		Chart.plugins.register(plugins[k]);
-	}
+    if (plugins.hasOwnProperty(k)) {
+        Chart.plugins.register(plugins[k]);
+    }
 }
 
 Chart.platform.initialize();
 
 module.exports = Chart;
 if (typeof window !== 'undefined') {
-	window.Chart = Chart;
+    window.Chart = Chart;
 }
 
 // DEPRECATIONS

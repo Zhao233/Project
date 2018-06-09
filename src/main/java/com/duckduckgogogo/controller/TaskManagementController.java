@@ -23,6 +23,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 摄像头任务配置controller
+ */
 @Controller
 @RequestMapping("/console/facetask_management")
 public class TaskManagementController {
@@ -49,6 +52,8 @@ public class TaskManagementController {
         p.put("total", page != null ? page.getTotalElements() : 0);
         p.put("rows", page != null ? page.getContent() : "");
 
+        System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=");
+
         return p;
     }
 
@@ -63,50 +68,47 @@ public class TaskManagementController {
         task.setRtspUrl(task.getRtspUrl().trim());
         task.setReceiveUrl(task.getReceiveUrl().trim());
         task.setScore(task.getScore().trim());
-        
+
         String url = "";
         String param = "";
-        
-        ProjectRestController.configInfo = configInfoService.findById(1);
-        
-        if(task.getTaskId()==null||task.getTaskId().equals(""))
-        {
-	        url = "http://" + ProjectRestController.configInfo.getServerIP() + ":80/Task/CreateTask?ProjectID=1000";
-			
-			param = "{\"taskType\":0,\"param\":{\"Source\":{\"ProtoType\":1,\"RtspUrl\":\"" + task.getRtspUrl() + "\",\"SourceType\":2},\"Result\":[{\"PORT\":\"\",\"Index\":0,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1},{\"Index\":1,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1}],\"Private\":{\"targets\":[{\"dbId\":\"" + task.getDbId() + "\",\"score\":"+ task.getScore() +"}]}}}";
-	    }else {
-            url = "http://" + ProjectRestController.configInfo.getServerIP() + ":80/Task/UpdateConfig?ProjectID=1000";
-			
-			param = "{\"taskType\":0,\"taskID\":\"" + task.getTaskId() + "\",\"isFullUpdate\":1,\"fullParam\":{\"Source\":{\"ProtoType\":1,\"RtspUrl\":\"" + task.getRtspUrl() + "\",\"SourceType\":2},\"Result\":[{\"PORT\":\"\",\"Index\":0,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1},{\"Index\":1,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1}],\"Private\":{\"targets\":[{\"dbId\":\"" + task.getDbId() + "\",\"score\":" + task.getScore() + "}]}}}";
-	    }
-	    	
-		RestTemplate rest = new RestTemplate();
 
-		String string = rest.postForObject(url, param, String.class);
-		
-		System.out.println(string);
-		
-		JSONObject obj = JSONObject.fromObject(string);
-        
-		String returnCode = obj.getString("returnCode");
-		
-		if(returnCode.equals("0"))
-		{
-			if(task.getTaskId()==null||task.getTaskId().equals(""))
-	        {
-				String taskID = obj.getString("taskID");
-				task.setTaskId(taskID);
-	        }
-		}else {
-			message.put("WARNING", "returnCode:"+returnCode);
-		}
-		
+        ProjectRestController.configInfo = configInfoService.findById(1);
+
+        if (task.getTaskId() == null || task.getTaskId().equals("")) {
+            url = "http://" + ProjectRestController.configInfo.getServerIP() + ":80/Task/CreateTask?ProjectID=1000";
+
+            param = "{\"taskType\":0,\"param\":{\"Source\":{\"ProtoType\":1,\"RtspUrl\":\"" + task.getRtspUrl() + "\",\"SourceType\":2},\"Result\":[{\"PORT\":\"\",\"Index\":0,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1},{\"Index\":1,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1}],\"Private\":{\"targets\":[{\"dbId\":\"" + task.getDbId() + "\",\"score\":" + task.getScore() + "}]}}}";
+        } else {
+            url = "http://" + ProjectRestController.configInfo.getServerIP() + ":80/Task/UpdateConfig?ProjectID=1000";
+
+            param = "{\"taskType\":0,\"taskID\":\"" + task.getTaskId() + "\",\"isFullUpdate\":1,\"fullParam\":{\"Source\":{\"ProtoType\":1,\"RtspUrl\":\"" + task.getRtspUrl() + "\",\"SourceType\":2},\"Result\":[{\"PORT\":\"\",\"Index\":0,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1},{\"Index\":1,\"ProtocolType\":10,\"URL\":\"" + task.getReceiveUrl() + "\",\"FilterNoImg\":1}],\"Private\":{\"targets\":[{\"dbId\":\"" + task.getDbId() + "\",\"score\":" + task.getScore() + "}]}}}";
+        }
+
+        RestTemplate rest = new RestTemplate();
+
+        String string = rest.postForObject(url, param, String.class);
+
+        System.out.println(string);
+
+        JSONObject obj = JSONObject.fromObject(string);
+
+        String returnCode = obj.getString("returnCode");
+
+        if (returnCode.equals("0")) {
+            if (task.getTaskId() == null || task.getTaskId().equals("")) {
+                String taskID = obj.getString("taskID");
+                task.setTaskId(taskID);
+            }
+        } else {
+            message.put("WARNING", "returnCode:" + returnCode);
+        }
+
         // "FAILED" "SUCCEED"
 
         if (message.isEmpty()) {
-        	task.setEnabled(true);
-        	task.setUpdateDate(new Date());
-        	taskService.save(task);
+            task.setEnabled(true);
+            task.setUpdateDate(new Date());
+            taskService.save(task);
 
             r.put("status", "SUCCEED");
         } else {
@@ -119,44 +121,43 @@ public class TaskManagementController {
 
     @RequestMapping("/get/{id}")
     @ResponseBody
-    public Task get (@PathVariable Integer id) {
+    public Task get(@PathVariable Integer id) {
         Task task = taskService.findById(id.longValue());
         return task;
     }
-    
+
     @PostMapping("/delete")
     @ResponseBody
     public Map<String, Object> reOpen(@RequestParam Integer id) throws Exception {
         Map<String, Object> r = new HashMap<>();
         Map<String, String> message = new HashMap<>();
-        
+
         Task task = taskService.findById(id);
-        
+
         ProjectRestController.configInfo = configInfoService.findById(1);
-        
+
         String url = "http://" + ProjectRestController.configInfo.getServerIP() + ":80/Task/DeleteTask";
         String param = "{\"taskID\":\"" + task.getTaskId() + "\"}";
-        
+
         RestTemplate rest = new RestTemplate();
 
-		String string = rest.postForObject(url, param, String.class);
-		
-		System.out.println(string);
-		
-		JSONObject obj = JSONObject.fromObject(string);
-        
-		String returnCode = obj.getString("returnCode");
-        
-		if(!returnCode.equals("0"))
-		{
-			message.put("WARNING", "returnCode:"+returnCode);
-		}
-		
+        String string = rest.postForObject(url, param, String.class);
+
+        System.out.println(string);
+
+        JSONObject obj = JSONObject.fromObject(string);
+
+        String returnCode = obj.getString("returnCode");
+
+        if (!returnCode.equals("0")) {
+            message.put("WARNING", "returnCode:" + returnCode);
+        }
+
         if (message.isEmpty()) {
-        	task.setEnabled(false);
-        	task.setUpdateDate(new Date());
-        	taskService.save(task);
-           
+            task.setEnabled(false);
+            task.setUpdateDate(new Date());
+            taskService.save(task);
+
             r.put("status", "SUCCEED");
         } else {
             r.put("status", "FAILED");

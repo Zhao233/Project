@@ -8,12 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Bootstrap {
     private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
-    
+
 
     public static void main(String[] args) {
-    	
-    	
-    	
+
+
         SpringApplication.run(Bootstrap.class, args);
 
         logger.info("HELLOWORLD Started.");
@@ -31,6 +30,6 @@ public class Bootstrap {
 //        System.out.println("Location : "+uri.toASCIIString());
         logger.info("666666666");
         */
-       
+
     }
 }

@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+/**
+ * 人员管理controller
+ */
 
 @Controller
 @RequestMapping("/console/user_management")
@@ -58,7 +61,7 @@ public class UserManagementController {
         if (mark != null && mark.getId() == logged.getId()) {
             message.put("WARNING", "Oh snap! You can't modify yourself.");
         } else {
-            if (mark != null && user.getPassword().isEmpty() && confirmPassword.isEmpty())  {
+            if (mark != null && user.getPassword().isEmpty() && confirmPassword.isEmpty()) {
                 user.setPassword(mark.getPassword());
             } else {
                 if (user.getPassword() != null && !user.getPassword().isEmpty()
@@ -82,7 +85,8 @@ public class UserManagementController {
                 boolean ok = Pattern.compile(regEx).matcher(user.getUsername()).matches();
                 if (ok) {
                     mark = userService.findByUsername(user.getUsername());
-                    if (mark != null && user.getId() != mark.getId()) message.put("username", "Oh snap! Already existed.");
+                    if (mark != null && user.getId() != mark.getId())
+                        message.put("username", "Oh snap! Already existed.");
                 } else {
                     message.put("username", "Oh snap! 4-30 letters,and must be A-Z,a-z,0-9 or _ or -");
                 }
@@ -137,7 +141,7 @@ public class UserManagementController {
 
     @RequestMapping("/get/{id}")
     @ResponseBody
-    public User get (@PathVariable Integer id) {
+    public User get(@PathVariable Integer id) {
         User user = userService.findById(id.longValue());
         if (user != null) user.setPassword("");
         return user;

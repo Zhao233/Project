@@ -7,15 +7,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "FACE_TASK")
 public class Task {
-	@Id
+    @Id
     //@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-	
-	@Column(name = "TASKID", length = 100)
+
+    @Column(name = "TASKID", length = 100)
     private String taskId;
-	
-	@Column(name = "RTSPURL", length = 200)
+
+    @Column(name = "RTSPURL", length = 200)
     private String rtspUrl;
 
     @Column(name = "RECEIVEURL", length = 200)
@@ -26,10 +26,10 @@ public class Task {
 
     @Column(name = "SCORE", length = 100)
     private String score;
-    
+
     @Column(name = "UPDATEDATE")
     private Date updateDate;
-    
+
     @Column(name = "ENABLED")
     private boolean enabled;
 
@@ -44,7 +44,7 @@ public class Task {
     public void setId(Long id) {
         if (id != null) this.id = id;
     }
-    
+
     public String getTaskId() {
         return taskId;
     }
@@ -52,7 +52,7 @@ public class Task {
     public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
-    
+
     public String getRtspUrl() {
         return rtspUrl;
     }
@@ -60,7 +60,7 @@ public class Task {
     public void setRtspUrl(String rtspUrl) {
         this.rtspUrl = rtspUrl;
     }
-    
+
     public String getReceiveUrl() {
         return receiveUrl;
     }
@@ -68,7 +68,7 @@ public class Task {
     public void setReceiveUrl(String receiveUrl) {
         this.receiveUrl = receiveUrl;
     }
-    
+
     public String getDbId() {
         return dbId;
     }
@@ -84,7 +84,7 @@ public class Task {
     public void setScore(String score) {
         this.score = score;
     }
-    
+
     public Date getUpdateDate() {
         return updateDate;
     }
@@ -92,7 +92,7 @@ public class Task {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-    
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -100,7 +100,7 @@ public class Task {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-    
+
     public int getVersion() {
         return version;
     }

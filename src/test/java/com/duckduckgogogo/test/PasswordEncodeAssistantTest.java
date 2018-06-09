@@ -17,7 +17,7 @@ public class PasswordEncodeAssistantTest {
     @Test
     public void testEncode() {
         Assert.assertTrue(SHA.equals(
-            PasswordEncodeAssistant.encode(chapters)
+                PasswordEncodeAssistant.encode(chapters)
         ));
     }
 
@@ -25,7 +25,7 @@ public class PasswordEncodeAssistantTest {
     @Test
     public void testEncodeSHA256() {
         Assert.assertTrue(SHA256.equals(
-            PasswordEncodeAssistant.encode(chapters, PasswordEncodeAssistant.SHA256)
+                PasswordEncodeAssistant.encode(chapters, PasswordEncodeAssistant.SHA256)
         ));
     }
 
@@ -33,7 +33,7 @@ public class PasswordEncodeAssistantTest {
     @Test
     public void testEncodeMD5() {
         Assert.assertTrue(MD5.equals(
-            PasswordEncodeAssistant.encode(chapters, PasswordEncodeAssistant.MD5)
+                PasswordEncodeAssistant.encode(chapters, PasswordEncodeAssistant.MD5)
         ));
     }
 }

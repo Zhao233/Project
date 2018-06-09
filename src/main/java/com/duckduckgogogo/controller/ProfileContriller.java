@@ -43,7 +43,7 @@ public class ProfileContriller {
             user.setRole(mark.getRole());
             user.setEnabled(mark.isEnabled());
 
-            if (user.getPassword().isEmpty() && confirmPassword.isEmpty())  {
+            if (user.getPassword().isEmpty() && confirmPassword.isEmpty()) {
                 user.setPassword(mark.getPassword());
             } else {
                 if (user.getPassword() != null && !user.getPassword().isEmpty()
@@ -67,7 +67,8 @@ public class ProfileContriller {
                 boolean ok = Pattern.compile(regEx).matcher(user.getUsername()).matches();
                 if (ok) {
                     mark = userService.findByUsername(user.getUsername());
-                    if (mark != null && user.getId() != mark.getId()) message.put("username", "Oh snap! Already existed.");
+                    if (mark != null && user.getId() != mark.getId())
+                        message.put("username", "Oh snap! Already existed.");
                 } else {
                     message.put("username", "Oh snap! 4-30 letters,and must be A-Z,a-z,0-9 or _ or -");
                 }

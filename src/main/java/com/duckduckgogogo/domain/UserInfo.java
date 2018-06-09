@@ -25,17 +25,17 @@ public class UserInfo {
 
     @Column(name = "UPDATESTATUS")
     private boolean updatestatus;
-    
+
     @Column(name = "ENABLED")
     private boolean enabled;
-    
+
     @Column(name = "UPDATEDATE")
     private Date updateDate;
 
     @Version
     @Column(name = "version")
     private int version;
-    
+
     public long getId() {
         return id;
     }
@@ -61,9 +61,9 @@ public class UserInfo {
     }
 
     public String getFeature() {
-        return "http://" + ProjectRestController.configInfo.getServerIP() + ":"+feature;
+        return "http://" + ProjectRestController.configInfo.getServerIP() + ":" + feature;
     }
-    
+
     public String getFeatureUrl() {
         return feature;
     }
@@ -80,31 +80,31 @@ public class UserInfo {
         this.updatestatus = updatestatus;
     }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-	
-	public int getVersion() {
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public int getVersion() {
         return version;
     }
 
-	public Date getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-	
+
     public void setVersion(Integer version) {
         if (version != null) this.version = version;
     }
-	
-	public long getUserid() {
-		return id;
+
+    public long getUserid() {
+        return id;
     }
 }

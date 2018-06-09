@@ -24,27 +24,27 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         (auth.userDetailsService(userDetailsService)).passwordEncoder(
-            new PasswordEncoder() {
-                @Override
-                public String encode(CharSequence charSequence) {
-                    return PasswordEncodeAssistant.encode(((String) charSequence).toCharArray());
-                }
+                new PasswordEncoder() {
+                    @Override
+                    public String encode(CharSequence charSequence) {
+                        return PasswordEncodeAssistant.encode(((String) charSequence).toCharArray());
+                    }
 
-                @Override
-                public boolean matches(CharSequence charSequence, String encodedPassword) {
-                    return encodedPassword.equals(encode(charSequence));
+                    @Override
+                    public boolean matches(CharSequence charSequence, String encodedPassword) {
+                        return encodedPassword.equals(encode(charSequence));
+                    }
                 }
-            }
         );
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/style/**", "/javascript/**", "/fonts/**","/api/**","/console/**", "/images/**", "/voices/**").permitAll() //
+                .antMatchers("/", "/style/**", "/javascript/**", "/fonts/**", "/api/**", "/console/**", "/images/**", "/voices/**").permitAll() //
                 .anyRequest().authenticated() //
-            .and().formLogin().loginPage("/login").successForwardUrl("/logged").failureUrl("/?error").permitAll() //
-            .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").permitAll(); //
+                .and().formLogin().loginPage("/login").successForwardUrl("/logged").failureUrl("/?error").permitAll() //
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").permitAll(); //
 
         http.csrf().disable();
 
@@ -57,6 +57,9 @@ public class CustomSecurityConfigurer extends WebSecurityConfigurerAdapter {
         @Autowired
         private UserService userService;
 
+        /**
+         * 实现查找功能
+         * */
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
             UserDetails user = null;

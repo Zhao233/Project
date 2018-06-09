@@ -16,7 +16,7 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
 
-        // registry.addInterceptor(new SecurityInterceptor()).addPathPatterns("/console/**");
+        registry.addInterceptor(new SecurityInterceptor()).addPathPatterns("/console/**");
     }
 
     static class SecurityInterceptor implements HandlerInterceptor {
@@ -26,9 +26,11 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
                                  Object handler) throws Exception {
             User user = (User) request.getSession().getAttribute("user");
             if (user != null) {
+
                 String role = user.getRole();
                 String uri = request.getRequestURI();
                 System.out.println(uri.indexOf("/console/profile"));
+
                 if (uri.equals("/console") || uri.equals("/console/")) return true;
                 if (uri.contains("/console/project_management") || uri.contains("/console/profile")) {
                     return true;
@@ -59,7 +61,6 @@ public class CustomMvcConfigurer extends WebMvcConfigurerAdapter {
         public void afterCompletion(HttpServletRequest request,
                                     HttpServletResponse response,
                                     Object handler, Exception ex) throws Exception {
-
         }
     }
 }

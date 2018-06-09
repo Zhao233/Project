@@ -14,10 +14,21 @@ import java.util.Set;
 @Entity
 @Table(name = "FACE_USERS")
 public class User implements UserDetails, Serializable {
-
+    /**
+     *
+     * */
     public final static String ROLE_ADMINISTRATOR = "A";
+    /**
+     *
+     * */
     public final static String ROLE_CUSTOMER = "C";
+    /**
+     *
+     * */
     public final static String ROLE_SUPPLIER = "S";
+    /**
+     *
+     * */
     public final static String ROLE_PROJECT_MANAGEMENT = "PM";
 
     @Id
